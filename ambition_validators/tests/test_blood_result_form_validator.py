@@ -3,13 +3,15 @@ from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 from django.test.utils import override_settings
+from edc_appointment.models import Appointment
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO, POS, NOT_APPLICABLE
 from edc_reportable import GRAMS_PER_DECILITER, IU_LITER, TEN_X_9_PER_LITER
-from edc_reportable import MICROMOLES_PER_LITER, MILLIGRAMS_PER_DECILITER, MILLIMOLES_PER_LITER
+from edc_reportable import MICROMOLES_PER_LITER, MILLIGRAMS_PER_DECILITER
+from edc_reportable import MILLIMOLES_PER_LITER
 
 from ..form_validators import BloodResultFormValidator
-from .models import SubjectVisit, SubjectConsent, BloodResult, Appointment
+from .models import SubjectVisit, SubjectConsent, BloodResult
 
 
 class TestBloodResultFormValidator(TestCase):
@@ -28,7 +30,6 @@ class TestBloodResultFormValidator(TestCase):
             appointment=appointment)
 
         self.cleaned_data = {
-            'subject_visit': self.subject_visit,
             'haemoglobin': 15,
             'haemoglobin_units': GRAMS_PER_DECILITER,
             'haemoglobin_abnormal': NO,

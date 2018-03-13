@@ -3,11 +3,12 @@ from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 from django.test.utils import override_settings
+from edc_appointment.models import Appointment
 from edc_base import get_utcnow
 from edc_constants.constants import YES, NO, NOT_DONE, NOT_APPLICABLE
 
 from ..form_validators import LumbarPunctureCsfFormValidator
-from .models import SubjectConsent, SubjectVisit, LumbarPunctureCsf, Appointment
+from .models import SubjectConsent, SubjectVisit, LumbarPunctureCsf
 
 
 class TestLumbarPunctureFormValidator(TestCase):

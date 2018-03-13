@@ -1,7 +1,6 @@
-from edc_constants.constants import YES, NO, OTHER, NOT_APPLICABLE
-
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
+from edc_constants.constants import YES, NO, OTHER, NOT_APPLICABLE
 
 from ..constants import WORKING
 from ..form_validators import MedicalExpensesFormValidator

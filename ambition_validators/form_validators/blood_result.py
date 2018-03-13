@@ -112,6 +112,7 @@ class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
             grade = grp.get_grade(value, **opts)
         except NotEvaluated as e:
             raise forms.ValidationError({field: str(e)})
+
         if grade and grade.grade and reportable != str(grade.grade):
             if reportable != ALREADY_REPORTED:
                 raise forms.ValidationError({
@@ -132,6 +133,7 @@ class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
             elif normal and not grade and abnormal == YES:
                 raise forms.ValidationError({
                     f'{field}_abnormal': 'Invalid. Result is not abnormal'})
+
         if abnormal == YES and reportable == NOT_APPLICABLE:
             raise forms.ValidationError(
                 {f'{field}_reportable': 'This field is applicable if result is abnormal'})

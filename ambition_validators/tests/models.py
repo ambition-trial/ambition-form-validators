@@ -1,12 +1,11 @@
+from django.db import models
+from django.db.models import options
+from django.db.models.deletion import PROTECT
 from edc_appointment.models import Appointment
 from edc_base.model_mixins import ListModelMixin, BaseUuidModel
 from edc_base.utils import get_utcnow
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
-
-from django.db import models
-from django.db.models import options
-from django.db.models.deletion import PROTECT
 
 
 options.DEFAULT_NAMES = (options.DEFAULT_NAMES + ('consent_model',))
@@ -14,15 +13,6 @@ options.DEFAULT_NAMES = (options.DEFAULT_NAMES + ('consent_model',))
 
 class ListModel(ListModelMixin, BaseUuidModel):
     pass
-
-
-# class Appointment(BaseUuidModel):
-#
-#     visit_code_sequence = models.IntegerField(
-#         verbose_name=('Sequence'),
-#         default=0,
-#         null=True,
-#         blank=True)
 
 
 class RequiresConsentModelMixin(models.Model):
@@ -39,15 +29,6 @@ class SubjectConsent(UpdatesOrCreatesRegistrationModelMixin, BaseUuidModel):
     gender = models.CharField(max_length=25)
 
     dob = models.DateField()
-
-
-class Appointment(BaseUuidModel):
-
-    subject_identifier = models.CharField(max_length=25)
-
-    appt_datetime = models.DateTimeField(default=get_utcnow)
-
-    visit_code = models.CharField(max_length=25)
 
 
 class SubjectVisit(RequiresConsentModelMixin, BaseUuidModel):
