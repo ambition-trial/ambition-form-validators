@@ -28,6 +28,21 @@ class TestWeek2Form(TestCase):
         except forms.ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
 
+    def test_discharged_yes_require_research_discharge_date(self):
+        cleaned_data = {'discharged': YES,
+                        'research_discharge_date': None}
+        week2 = Week2FormValidator(cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, week2.validate)
+
+        cleaned_data = {'discharged': YES,
+                        'research_discharge_date': get_utcnow()}
+        week2 = Week2FormValidator(cleaned_data=cleaned_data)
+
+        try:
+            week2.validate()
+        except forms.ValidationError as e:
+            self.fail(f'ValidationError unexpectedly raised. Got{e}')
+
     def test_died_yes_require_date_of_death(self):
         cleaned_data = {'died': YES,
                         'death_date_time': None}
