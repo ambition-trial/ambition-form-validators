@@ -20,7 +20,8 @@ class TestWeek2Form(TestCase):
         self.assertRaises(ValidationError, week2.validate)
 
         cleaned_data = {'discharged': YES,
-                        'discharge_date': get_utcnow()}
+                        'discharge_date': get_utcnow(),
+                        'research_discharge_date': get_utcnow()}
         week2 = Week2FormValidator(cleaned_data=cleaned_data)
 
         try:
@@ -35,6 +36,7 @@ class TestWeek2Form(TestCase):
         self.assertRaises(ValidationError, week2.validate)
 
         cleaned_data = {'discharged': YES,
+                        'discharge_date': get_utcnow(),
                         'research_discharge_date': get_utcnow()}
         week2 = Week2FormValidator(cleaned_data=cleaned_data)
 
