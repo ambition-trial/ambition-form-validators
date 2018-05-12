@@ -75,7 +75,7 @@ class LumbarPunctureCsfFormValidator(CrfRequisitionFormValidatorMixin, FormValid
                 message = {'csf_cr_ag': error_msg, 'india_ink': error_msg}
                 raise forms.ValidationError(message, code=REQUIRED_ERROR)
 
-        condition = settings.COUNTRY == 'botswana' or settings.COUNTRY == 'malawi'
+        condition = settings.SITE_ID == 10 or settings.SITE_ID == 40
         self.applicable_if_true(
             condition=condition, field_applicable='bios_crag')
 

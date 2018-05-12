@@ -68,8 +68,7 @@ class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
             field='results_reportable', responses=[GRADE3, GRADE4],
             suffix='_reportable', word='reportable')
 
-        # TODO: Use site code to validate not country, Gaborone & Blantyre
-        if (settings.COUNTRY not in ['botswana', 'malawi']
+        if (settings.SITE_ID not in [10, 40]
                 and self.cleaned_data.get('bios_crag') != NOT_APPLICABLE):
             raise forms.ValidationError(
                 {f'bios_crag': 'This field is not applicable'})

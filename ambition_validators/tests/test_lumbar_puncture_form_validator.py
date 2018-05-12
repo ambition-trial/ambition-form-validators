@@ -149,7 +149,7 @@ class TestLumbarPunctureFormValidator(TestCase):
             'Cannot be greater than 100%',
             str(form_validator._errors.get('differential_lymphocyte_count')))
 
-    @override_settings(COUNTRY='botswana')
+    @override_settings(SITE_ID=10)
     def test_country_specific1(self):
         cleaned_data = {
             'subject_visit': self.subject_visit,
@@ -160,7 +160,7 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn('bios_crag', form_validator._errors)
 
-    @override_settings(COUNTRY='botswana')
+    @override_settings(SITE_ID=10)
     def test_country_specific2(self):
         cleaned_data = {
             'subject_visit': self.subject_visit,
@@ -173,7 +173,7 @@ class TestLumbarPunctureFormValidator(TestCase):
         except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got {e}')
 
-    @override_settings(COUNTRY='zimbabwe')
+    @override_settings(SITE_ID=20)
     def test_country_specific3(self):
         cleaned_data = {
             'subject_visit': self.subject_visit,
@@ -184,7 +184,7 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn('bios_crag', form_validator._errors)
 
-    @override_settings(COUNTRY='zimbabwe')
+    @override_settings(SITE_ID=20)
     def test_country_specific4(self):
         cleaned_data = {
             'subject_visit': self.subject_visit,
