@@ -9,6 +9,7 @@ git+https://github.com/ambition-trial/ambition-prn.git@develop#egg=ambition-prn
 git+https://github.com/ambition-trial/ambition-screening.git@develop#egg=ambition-screening
 git+https://github.com/ambition-trial/ambition-subject@develop#egg=ambition_subject
 git+https://github.com/ambition-trial/ambition-visit-schedule.git@develop#egg=ambition_visit_schedule
+git+https://github.com/ambition-trial/ambition-sites@develop#egg=ambition-sites
 git+https://github.com/clinicedc/edc-appointment.git@develop#egg=edc_appointment
 git+https://github.com/clinicedc/edc-base.git@develop#egg=edc_base
 git+https://github.com/clinicedc/edc-consent.git@develop#egg=edc_consent
