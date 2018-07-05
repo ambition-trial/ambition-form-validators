@@ -12,11 +12,11 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 setup(
     name='ambition-validators',
     version='0.1.1',
-    author=u'lkepaletswe,Erik van Widenfelt',
+    author=u'Leslie Kepaletswe, Erik van Widenfelt',
     author_email='ew2789@gmail.com',
     packages=find_packages(),
     include_package_data=True,
-    url='https://github.com/ambition-study/ambition-validators',
+    url='https://github.com/ambition-trial/ambition-validators',
     license='GPL license, see LICENSE',
     description='ambition',
     long_description=README,
