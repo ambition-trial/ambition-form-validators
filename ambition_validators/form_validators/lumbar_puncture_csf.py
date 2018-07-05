@@ -22,7 +22,7 @@ class LumbarPunctureCsfFormValidator(CrfRequisitionFormValidatorMixin, FormValid
         self.validate_opening_closing_pressure()
 
         self.required_if_true(
-            self.cleaned_data.get('qc_requisition') is not None,
+            not self.cleaned_data.get('qc_requisition'),
             field='qc_requisition',
             field_required='quantitative_culture')
 
