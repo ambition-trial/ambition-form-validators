@@ -15,22 +15,6 @@ class ListModel(ListModelMixin, BaseUuidModel):
     pass
 
 
-# class Appointment(BaseUuidModel):
-#
-#     visit_code_sequence = models.IntegerField(
-#         verbose_name=('Sequence'),
-#         default=0,
-#         null=True,
-#         blank=True)
-
-
-class RequiresConsentModelMixin(models.Model):
-
-    class Meta:
-        abstract = True
-        consent_model = None
-
-
 class SubjectConsent(UpdatesOrCreatesRegistrationModelMixin, BaseUuidModel):
 
     subject_identifier = models.CharField(max_length=25)
@@ -40,22 +24,15 @@ class SubjectConsent(UpdatesOrCreatesRegistrationModelMixin, BaseUuidModel):
     dob = models.DateField()
 
 
-class Appointment(BaseUuidModel):
-
-    subject_identifier = models.CharField(max_length=25)
-
-    appt_datetime = models.DateTimeField(default=get_utcnow)
-
-    visit_code = models.CharField(max_length=25)
-
-
-class SubjectVisit(RequiresConsentModelMixin, BaseUuidModel):
+class SubjectVisit(BaseUuidModel):
 
     appointment = models.OneToOneField(Appointment, on_delete=PROTECT)
 
     subject_identifier = models.CharField(max_length=25)
 
     visit_code = models.CharField(max_length=25)
+
+    visit_code_sequence = models.IntegerField(default=0)
 
     appointment = models.OneToOneField(Appointment, on_delete=PROTECT)
 
@@ -66,9 +43,6 @@ class SubjectVisit(RequiresConsentModelMixin, BaseUuidModel):
         self.visit_code = self.appointment.visit_code
         self.subject_identifier = self.appointment.subject_identifier
         super().save(*args, **kwargs)
-
-    class Meta(RequiresConsentModelMixin.Meta):
-        consent_model = 'ambition_validator.subjectconsent'
 
 
 class SubjectRequisition(BaseUuidModel):
