@@ -6,6 +6,7 @@ from edc_constants.constants import YES, NOT_DONE
 from edc_form_validators import FormValidator
 from edc_form_validators import REQUIRED_ERROR
 from edc_lab import CrfRequisitionFormValidatorMixin
+from django.contrib.sites.models import Site
 
 
 class LumbarPunctureCsfFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
@@ -75,7 +76,8 @@ class LumbarPunctureCsfFormValidator(CrfRequisitionFormValidatorMixin, FormValid
                 message = {'csf_cr_ag': error_msg, 'india_ink': error_msg}
                 raise forms.ValidationError(message, code=REQUIRED_ERROR)
 
-        condition = settings.SITE_ID == 10 or settings.SITE_ID == 40
+        condition = (Site.objects.get_current().name == 'gaborone'
+                     or Site.objects.get_current().name == 'blantyre')
         self.applicable_if_true(
             condition=condition, field_applicable='bios_crag')
 
