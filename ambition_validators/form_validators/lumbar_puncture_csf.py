@@ -1,12 +1,11 @@
 from ambition_labs.panels import csf_chemistry_panel, csf_panel
 from ambition_visit_schedule.constants import DAY1
 from django import forms
-from django.conf import settings
+from django.apps import apps as django_apps
 from edc_constants.constants import YES, NOT_DONE
 from edc_form_validators import FormValidator
 from edc_form_validators import REQUIRED_ERROR
 from edc_lab import CrfRequisitionFormValidatorMixin
-from django.contrib.sites.models import Site
 
 
 class LumbarPunctureCsfFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
@@ -16,6 +15,8 @@ class LumbarPunctureCsfFormValidator(CrfRequisitionFormValidatorMixin, FormValid
         ('csf_requisition', 'csf_assay_datetime')]
 
     def clean(self):
+
+        Site = django_apps.get_model('sites.site')
 
         self.validate_requisition(
             'qc_requisition', 'qc_assay_datetime', csf_panel)

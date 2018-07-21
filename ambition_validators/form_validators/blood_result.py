@@ -3,7 +3,6 @@ from ambition_labs.panels import chemistry_panel, chemistry_alt_panel
 from ambition_subject.constants import ALREADY_REPORTED
 from ambition_visit_schedule.constants import DAY1
 from django.apps import apps as django_apps
-from django.contrib.sites.models import Site
 from django.forms import forms
 from edc_constants.constants import NO, YES, NOT_APPLICABLE
 from edc_form_validators import FormValidator
@@ -14,7 +13,7 @@ from edc_reportable import site_reportables, NotEvaluated, GRADE3, GRADE4
 class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
 
     def clean(self):
-
+        Site = django_apps.get_model('sites.site')
         self.required_if_true(
             any([self.cleaned_data.get(f) is not None
                  for f in [f for f in self.instance.ft_fields]]),
