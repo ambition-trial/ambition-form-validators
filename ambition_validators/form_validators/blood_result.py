@@ -3,19 +3,17 @@ from ambition_labs.panels import chemistry_panel, chemistry_alt_panel
 from ambition_subject.constants import ALREADY_REPORTED
 from ambition_visit_schedule.constants import DAY1
 from django.apps import apps as django_apps
-from django.conf import settings
 from django.forms import forms
 from edc_constants.constants import NO, YES, NOT_APPLICABLE
 from edc_form_validators import FormValidator
 from edc_lab import CrfRequisitionFormValidatorMixin
 from edc_reportable import site_reportables, NotEvaluated, GRADE3, GRADE4
-from ambition_sites.get_site_id import get_site_id
 
 
 class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
 
     def clean(self):
-
+        Site = django_apps.get_model('sites.site')
         self.required_if_true(
             any([self.cleaned_data.get(f) is not None
                  for f in [f for f in self.instance.ft_fields]]),
@@ -71,7 +69,7 @@ class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
             suffix='_reportable', word='reportable')
 
         if self.cleaned_data.get('subject_visit').visit_code == DAY1:
-            if (settings.SITE_ID not in [get_site_id('gaborone'), get_site_id('blantyre')]
+            if (Site.objects.get_current().name not in ['gaborone', 'blantyre']
                     and self.cleaned_data.get('bios_crag') != NOT_APPLICABLE):
                 raise forms.ValidationError(
                     {f'bios_crag': 'This field is not applicable'})

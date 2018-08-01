@@ -1,9 +1,12 @@
+from ambition_sites import ambition_sites, fqdn
 from ambition_visit_schedule import DAY1
 from dateutil.relativedelta import relativedelta
+from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 from django.test.utils import override_settings
 from edc_appointment.models import Appointment
+from edc_base.sites.utils import add_or_update_django_sites
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO, POS, NOT_APPLICABLE
 from edc_reportable import GRAMS_PER_DECILITER, IU_LITER, TEN_X_9_PER_LITER
@@ -14,7 +17,14 @@ from ..form_validators import BloodResultFormValidator
 from .models import SubjectVisit, SubjectConsent, BloodResult
 
 
+@tag('1')
 class TestBloodResultFormValidator(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        add_or_update_django_sites(
+            apps=django_apps, sites=ambition_sites, fqdn=fqdn, verbose=True)
+        return super().setUpClass()
 
     def setUp(self):
 

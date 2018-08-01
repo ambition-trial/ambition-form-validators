@@ -1,10 +1,13 @@
+from ambition_sites import ambition_sites, fqdn
 from ambition_visit_schedule import DAY1
 from dateutil.relativedelta import relativedelta
+from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 from django.test.utils import override_settings
 from edc_appointment.models import Appointment
 from edc_base import get_utcnow
+from edc_base.sites.utils import add_or_update_django_sites
 from edc_constants.constants import YES, NO, NOT_DONE, NOT_APPLICABLE
 
 from ..form_validators import LumbarPunctureCsfFormValidator
@@ -12,6 +15,12 @@ from .models import SubjectConsent, SubjectVisit, LumbarPunctureCsf
 
 
 class TestLumbarPunctureFormValidator(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        add_or_update_django_sites(
+            apps=django_apps, sites=ambition_sites, fqdn=fqdn, verbose=True)
+        return super().setUpClass()
 
     def setUp(self):
         self.subject_consent = SubjectConsent.objects.create(

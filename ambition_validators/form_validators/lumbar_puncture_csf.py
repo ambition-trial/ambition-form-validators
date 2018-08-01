@@ -1,7 +1,7 @@
 from ambition_labs.panels import csf_chemistry_panel, csf_panel
 from ambition_visit_schedule.constants import DAY1
 from django import forms
-from django.conf import settings
+from django.apps import apps as django_apps
 from edc_constants.constants import YES, NOT_DONE
 from edc_form_validators import FormValidator
 from edc_form_validators import REQUIRED_ERROR
@@ -15,6 +15,8 @@ class LumbarPunctureCsfFormValidator(CrfRequisitionFormValidatorMixin, FormValid
         ('csf_requisition', 'csf_assay_datetime')]
 
     def clean(self):
+
+        Site = django_apps.get_model('sites.site')
 
         self.validate_requisition(
             'qc_requisition', 'qc_assay_datetime', csf_panel)
@@ -75,7 +77,8 @@ class LumbarPunctureCsfFormValidator(CrfRequisitionFormValidatorMixin, FormValid
                 message = {'csf_cr_ag': error_msg, 'india_ink': error_msg}
                 raise forms.ValidationError(message, code=REQUIRED_ERROR)
 
-        condition = settings.SITE_ID == 10 or settings.SITE_ID == 40
+        condition = (Site.objects.get_current().name == 'gaborone'
+                     or Site.objects.get_current().name == 'blantyre')
         self.applicable_if_true(
             condition=condition, field_applicable='bios_crag')
 
