@@ -1,6 +1,6 @@
 from ambition_labs.panels import csf_panel
 from ambition_sites import ambition_sites, fqdn
-from ambition_visit_schedule import DAY1
+from ambition_visit_schedule import DAY1, DAY3
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
@@ -34,6 +34,13 @@ class TestLumbarPunctureFormValidator(TestCase):
             appt_datetime=get_utcnow(),
             visit_code=DAY1)
         self.subject_visit = SubjectVisit.objects.create(
+            appointment=appointment)
+
+        appointment = Appointment.objects.create(
+            subject_identifier=self.subject_consent.subject_identifier,
+            appt_datetime=get_utcnow(),
+            visit_code=DAY3)
+        self.subject_visit_d3 = SubjectVisit.objects.create(
             appointment=appointment)
 
     def test_pressure(self):
@@ -102,7 +109,6 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertIn('not required', str(
             form_validator._errors.get('other_csf_culture')))
 
-    @tag('1')
     def test_qc_culture(self):
         cleaned_data = {
             'subject_visit': self.subject_visit,
@@ -117,7 +123,6 @@ class TestLumbarPunctureFormValidator(TestCase):
         except ValidationError:
             self.fail('ValidationError unexpectedly raised')
 
-    @tag('1')
     def test_qc_culture_requisition_not_required_if_no_result(self):
         panel = Panel.objects.create(name=csf_panel.name)
         requisition = SubjectRequisition.objects.create(
@@ -136,7 +141,6 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertIn('This field is not required', str(
             form_validator._errors.get('qc_requisition')))
 
-    @tag('1')
     def test_qc_assay_datetime_not_required_if_no_result(self):
         panel = Panel.objects.create(name=csf_panel.name)
         requisition = SubjectRequisition.objects.create(
@@ -155,7 +159,6 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertIn('This field is not required', str(
             form_validator._errors.get('qc_assay_datetime')))
 
-    @tag('1')
     def test_qc_culture_requisition_required_if_value(self):
         """Requisition is required if there is a value.
         """
@@ -171,7 +174,6 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertIn('This field is required', str(
             form_validator._errors.get('qc_requisition')))
 
-    @tag('1')
     def test_qc_assay_datetime_required_if_value(self):
         """Requisition is required if there is a value.
         """
@@ -205,6 +207,49 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn('csf_cr_ag', form_validator._errors)
         self.assertIn('india_ink', form_validator._errors)
+
+    @tag('1')
+    def test_csf_wbc_cell_count_not_required_day1(self):
+        cleaned_data = {
+            'subject_visit': self.subject_visit,
+            'csf_wbc_cell_count': None,
+        }
+        form_validator = LumbarPunctureCsfFormValidator(
+            cleaned_data=cleaned_data,
+            instance=LumbarPunctureCsf())
+        try:
+            form_validator.validate()
+        except ValidationError:
+            self.fail('ValidationError unexpectedly raised')
+
+    def test_csf_wbc_cell_count_not_required_day3(self):
+        cleaned_data = {
+            'subject_visit': self.subject_visit_d3,
+            'csf_wbc_cell_count': None,
+        }
+        form_validator = LumbarPunctureCsfFormValidator(
+            cleaned_data=cleaned_data,
+            instance=LumbarPunctureCsf())
+        try:
+            form_validator.validate()
+        except ValidationError:
+            self.fail('ValidationError unexpectedly raised')
+
+    def test_csf_wbc_cell_count_min_max(self):
+        for i in range(0, 5):
+            cleaned_data = {
+                'subject_visit': self.subject_visit_d3,
+                'csf_wbc_cell_count': i,
+            }
+            form_validator = LumbarPunctureCsfFormValidator(
+                cleaned_data=cleaned_data,
+                instance=LumbarPunctureCsf())
+            try:
+                form_validator.validate()
+            except ValidationError:
+                self.fail(
+                    f'ValidationError unexpectedly raised. '
+                    f'Got {form_validator._errors}')
 
     def test_csf_cr_ag_no_csf_cr_ag_lfa_not_required(self):
         cleaned_data = {
