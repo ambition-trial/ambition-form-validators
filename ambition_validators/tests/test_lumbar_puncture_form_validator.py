@@ -1,3 +1,4 @@
+from ambition_labs.panels import csf_panel
 from ambition_sites import ambition_sites, fqdn
 from ambition_visit_schedule import DAY1
 from dateutil.relativedelta import relativedelta
@@ -11,7 +12,9 @@ from edc_base.sites.utils import add_or_update_django_sites
 from edc_constants.constants import YES, NO, NOT_DONE, NOT_APPLICABLE
 
 from ..form_validators import LumbarPunctureCsfFormValidator
-from .models import SubjectConsent, SubjectVisit, LumbarPunctureCsf
+from .models import SubjectConsent, SubjectVisit, LumbarPunctureCsf, SubjectRequisition, Panel
+from uuid import uuid4
+from pprint import pprint
 
 
 class TestLumbarPunctureFormValidator(TestCase):
@@ -98,6 +101,96 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertIn('other_csf_culture', form_validator._errors)
         self.assertIn('not required', str(
             form_validator._errors.get('other_csf_culture')))
+
+    @tag('1')
+    def test_qc_culture(self):
+        cleaned_data = {
+            'subject_visit': self.subject_visit,
+            'qc_requisition': None,
+            'qc_assay_datetime': None,
+            'quantitative_culture': None}
+        form_validator = LumbarPunctureCsfFormValidator(
+            cleaned_data=cleaned_data,
+            instance=LumbarPunctureCsf())
+        try:
+            form_validator.validate()
+        except ValidationError:
+            self.fail('ValidationError unexpectedly raised')
+
+    @tag('1')
+    def test_qc_culture_requisition_not_required_if_no_result(self):
+        panel = Panel.objects.create(name=csf_panel.name)
+        requisition = SubjectRequisition.objects.create(
+            subject_visit=self.subject_visit,
+            panel=panel)
+        requisition.panel_object = csf_panel
+        cleaned_data = {
+            'subject_visit': self.subject_visit,
+            'qc_requisition': requisition,
+            'qc_assay_datetime': get_utcnow(),
+            'quantitative_culture': None}
+        form_validator = LumbarPunctureCsfFormValidator(
+            cleaned_data=cleaned_data,
+            instance=LumbarPunctureCsf())
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('This field is not required', str(
+            form_validator._errors.get('qc_requisition')))
+
+    @tag('1')
+    def test_qc_assay_datetime_not_required_if_no_result(self):
+        panel = Panel.objects.create(name=csf_panel.name)
+        requisition = SubjectRequisition.objects.create(
+            subject_visit=self.subject_visit,
+            panel=panel)
+        requisition.panel_object = csf_panel
+        cleaned_data = {
+            'subject_visit': self.subject_visit,
+            'qc_requisition': None,
+            'qc_assay_datetime': get_utcnow(),
+            'quantitative_culture': None}
+        form_validator = LumbarPunctureCsfFormValidator(
+            cleaned_data=cleaned_data,
+            instance=LumbarPunctureCsf())
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('This field is not required', str(
+            form_validator._errors.get('qc_assay_datetime')))
+
+    @tag('1')
+    def test_qc_culture_requisition_required_if_value(self):
+        """Requisition is required if there is a value.
+        """
+        cleaned_data = {
+            'subject_visit': self.subject_visit,
+            'qc_requisition': None,
+            'qc_assay_datetime': None,
+            'quantitative_culture': '12'}
+        form_validator = LumbarPunctureCsfFormValidator(
+            cleaned_data=cleaned_data,
+            instance=LumbarPunctureCsf())
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('This field is required', str(
+            form_validator._errors.get('qc_requisition')))
+
+    @tag('1')
+    def test_qc_assay_datetime_required_if_value(self):
+        """Requisition is required if there is a value.
+        """
+        panel = Panel.objects.create(name=csf_panel.name)
+        requisition = SubjectRequisition.objects.create(
+            subject_visit=self.subject_visit,
+            panel=panel)
+        requisition.panel_object = csf_panel
+        cleaned_data = {
+            'subject_visit': self.subject_visit,
+            'qc_requisition': requisition,
+            'qc_assay_datetime': None,
+            'quantitative_culture': '12'}
+        form_validator = LumbarPunctureCsfFormValidator(
+            cleaned_data=cleaned_data,
+            instance=LumbarPunctureCsf())
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('This field is required', str(
+            form_validator._errors.get('qc_assay_datetime')))
 
     def test_india_ink_csf_arg_not_done_invalid(self):
         """Assert that either csf_cr_ag or india_ink is done.

@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import options
-from django.db.models.deletion import PROTECT
+from django.db.models.deletion import PROTECT, CASCADE
 from edc_appointment.models import Appointment
 from edc_base.model_mixins import ListModelMixin, BaseUuidModel
 from edc_base.utils import get_utcnow
@@ -13,6 +13,12 @@ options.DEFAULT_NAMES = (options.DEFAULT_NAMES + ('consent_model',))
 
 class ListModel(ListModelMixin, BaseUuidModel):
     pass
+
+
+class Panel(BaseUuidModel):
+
+    name = models.CharField(
+        max_length=25)
 
 
 class SubjectConsent(UpdatesOrCreatesRegistrationModelMixin, BaseUuidModel):
@@ -53,6 +59,8 @@ class SubjectRequisition(BaseUuidModel):
 
     requisition_datetime = models.DateTimeField(
         default=get_utcnow)
+
+    panel = models.ForeignKey(Panel, on_delete=CASCADE)
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.subject_visit.subject_identifier
