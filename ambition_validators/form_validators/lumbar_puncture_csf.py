@@ -30,12 +30,6 @@ class LumbarPunctureCsfFormValidator(CrfRequisitionFormValidatorMixin, FormValid
         self.validate_requisition(
             'csf_requisition', 'csf_assay_datetime', csf_chemistry_panel)
 
-        self.required_if_true(
-            (self.cleaned_data.get('subject_visit').visit_code == DAY1
-             and self.cleaned_data.get('subject_visit').visit_code_sequence == 0),
-            field_required='csf_wbc_cell_count',
-            inverse=False)
-
         self.not_required_if(
             None, field='differential_lymphocyte_count',
             field_required='differential_lymphocyte_unit')
