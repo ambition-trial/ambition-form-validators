@@ -18,15 +18,9 @@ class LumbarPunctureCsfFormValidator(CrfRequisitionFormValidatorMixin, FormValid
 
         Site = django_apps.get_model('sites.site')
 
-        self.validate_requisition(
-            'qc_requisition', 'qc_assay_datetime', csf_panel)
-
         self.validate_opening_closing_pressure()
 
-        self.required_if_true(
-            not self.cleaned_data.get('qc_requisition'),
-            field='qc_requisition',
-            field_required='quantitative_culture')
+        self.validate_quantitative_culture()
 
         self.required_if(
             YES,
@@ -96,6 +90,15 @@ class LumbarPunctureCsfFormValidator(CrfRequisitionFormValidatorMixin, FormValid
             YES,
             field='bios_crag',
             field_applicable='crag_t2_result')
+
+    def validate_quantitative_culture(self):
+
+        self.required_if_true(
+            self.cleaned_data.get('quantitative_culture') is not None,
+            field_required='qc_requisition')
+
+        self.validate_requisition(
+            'qc_requisition', 'qc_assay_datetime', csf_panel)
 
     def validate_percentage(self, field=None, unit=None):
         if self.cleaned_data.get(field):

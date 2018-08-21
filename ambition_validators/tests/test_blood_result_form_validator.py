@@ -17,7 +17,6 @@ from ..form_validators import BloodResultFormValidator
 from .models import SubjectVisit, SubjectConsent, BloodResult
 
 
-@tag('1')
 class TestBloodResultFormValidator(TestCase):
 
     @classmethod
