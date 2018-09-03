@@ -13,8 +13,6 @@ from edc_constants.constants import YES, NO, NOT_DONE, NOT_APPLICABLE
 
 from ..form_validators import LumbarPunctureCsfFormValidator
 from .models import SubjectConsent, SubjectVisit, LumbarPunctureCsf, SubjectRequisition, Panel
-from uuid import uuid4
-from pprint import pprint
 
 
 class TestLumbarPunctureFormValidator(TestCase):
@@ -208,7 +206,6 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertIn('csf_cr_ag', form_validator._errors)
         self.assertIn('india_ink', form_validator._errors)
 
-    @tag('1')
     def test_csf_wbc_cell_count_not_required_day1(self):
         cleaned_data = {
             'subject_visit': self.subject_visit,
