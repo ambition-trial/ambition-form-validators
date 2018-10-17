@@ -11,7 +11,10 @@ class PkPdCrfFormValidator(FormValidator):
                 YES,
                 field=f'flucytosine_dose_{num}_given',
                 field_required=f'flucytosine_dose_{num}_datetime')
-
+            self.required_if(
+                YES,
+                field=f'flucytosine_dose_{num}_given',
+                field_required=f'flucytosine_dose_{num}')
             self.required_if(
                 NO,
                 field=f'flucytosine_dose_{num}_given',
