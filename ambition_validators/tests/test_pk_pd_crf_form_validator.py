@@ -3,7 +3,8 @@ from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
 from edc_constants.constants import NO, YES
 
-from ..form_validators import PkPdCrfFormValidator
+from ..form_validators import PkPdCrfFormValidator, INCORRECT_TOTAL_DOSE
+from pprint import pprint
 
 
 class TestPkPdCrfFormValidator(TestCase):
@@ -75,6 +76,54 @@ class TestPkPdCrfFormValidator(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn(
             'flucytosine_dose_four_datetime', form_validator._errors)
+
+    def test_flucytosine_dose_total(self):
+        cleaned_data = {}
+        for num in ['one', 'two', 'three', 'four']:
+            cleaned_data.update({
+                f'flucytosine_dose_{num}_given': YES,
+                f'flucytosine_dose_{num}_datetime': get_utcnow(),
+                f'flucytosine_dose_{num}': 5,
+            })
+        # enter incorrect total
+        cleaned_data.update({'flucytosine_dose': 1})
+        form_validator = PkPdCrfFormValidator(
+            cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn(
+            'flucytosine_dose', form_validator._errors)
+
+        # correct the total
+        cleaned_data.update({'flucytosine_dose': 20})
+        form_validator = PkPdCrfFormValidator(
+            cleaned_data=cleaned_data)
+        try:
+            form_validator.validate()
+        except ValidationError as e:
+            self.fail(f'Validation error unexpectedly raised. Got {e}')
+
+        # try total when not all doses given
+        cleaned_data = {}
+        for num in ['one', 'two', 'three']:
+            cleaned_data.update({
+                f'flucytosine_dose_{num}_given': YES,
+                f'flucytosine_dose_{num}_datetime': get_utcnow(),
+                f'flucytosine_dose_{num}': 5,
+            })
+        cleaned_data.update({
+            f'flucytosine_dose_four_given': NO,
+        })
+        cleaned_data.update({'flucytosine_dose': 15})
+        try:
+            form_validator.validate()
+        except ValidationError as e:
+            self.fail(f'Validation error unexpectedly raised. Got {e}')
+
+    def test_flucytosine_dose_total2(self):
+        cleaned_data = {'flucytosine_dose': 15}
+        form_validator = PkPdCrfFormValidator(
+            cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.validate)
 
     def test_fluconazole_dose_given_yes(self):
         cleaned_data = {'fluconazole_dose_given': YES,
