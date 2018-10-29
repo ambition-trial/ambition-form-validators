@@ -20,3 +20,8 @@ class FollowUpFormValidator(FormValidator):
             YES,
             field='blood_transfusions',
             field_required='blood_transfusions_units')
+
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='antibiotic',
+            field_other='antibiotic_other')
