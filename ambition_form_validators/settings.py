@@ -2,7 +2,7 @@ import os
 import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP_NAME = 'ambition_validators'
+APP_NAME = 'ambition_form_validators'
 ETC_DIR = os.path.join(BASE_DIR, 'etc')
 SITE_ID = 40
 REVIEWER_SITE_ID = 0
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'edc_visit_schedule.apps.AppConfig',
     'ambition_screening.apps.AppConfig',
     'ambition_labs.apps.AppConfig',
-    'ambition_validators.apps.AppConfig'
+    'ambition_form_validators.apps.AppConfig'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -59,7 +59,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'ambition_validators.urls'
+ROOT_URLCONF = 'ambition_form_validators.urls'
 
 TEMPLATES = [
     {
@@ -77,7 +77,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ambition_validators.wsgi.application'
+WSGI_APPLICATION = 'ambition_form_validators.wsgi.application'
 
 
 # Database

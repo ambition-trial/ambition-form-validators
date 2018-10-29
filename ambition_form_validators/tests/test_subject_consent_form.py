@@ -3,8 +3,8 @@ from django import forms
 from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
 
-from ..form_validators import SubjectConsentFormValidator
-from .models import SubjectScreening
+from ambition_form_validators import SubjectConsentFormValidator
+from ambition_form_validators import SubjectScreening
 
 
 class TestSubjectConsentForm(TestCase):
@@ -15,7 +15,7 @@ class TestSubjectConsentForm(TestCase):
             screening_identifier=self.screening_identifier, age_in_years=20)
         subject_screening_model = SubjectConsentFormValidator.subject_screening_model
         subject_screening_model = subject_screening_model.replace(
-            'ambition_screening', 'ambition_validators')
+            'ambition_screening', 'ambition_form_validators')
         SubjectConsentFormValidator.subject_screening_model = subject_screening_model
 
     def test_subject_screening_ok(self):
