@@ -1,4 +1,3 @@
-from ambition_subject.constants import FOOT, BICYCLE
 from django.forms import forms
 from edc_constants.constants import YES, OTHER, NOT_APPLICABLE
 from edc_form_validators import FormValidator
@@ -40,7 +39,7 @@ class MedicalExpensesFormValidator(FormValidator):
 
         self.required_if_true(
             condition=self.cleaned_data.get(
-                'form_of_transport') not in [NOT_APPLICABLE, FOOT, BICYCLE],
+                'form_of_transport') not in [NOT_APPLICABLE, 'foot', 'bicycle'],
             field_required='transport_fare')
 
         self.required_if_true(
