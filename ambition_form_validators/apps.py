@@ -2,4 +2,4 @@ from django.apps import AppConfig as DjangoAppConfig
 
 
 class AppConfig(DjangoAppConfig):
-    name = 'ambition_validators'
+    name = 'ambition_form_validators'

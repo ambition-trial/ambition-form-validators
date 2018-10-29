@@ -1,5 +1,5 @@
 """
-WSGI config for ambition_validators project.
+WSGI config for ambition_form_validators project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ambition_validators.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ambition_form_validators.settings")
 
 application = get_wsgi_application()
