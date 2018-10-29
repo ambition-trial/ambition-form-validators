@@ -13,15 +13,15 @@ with open(os.path.join(os.path.dirname(__file__), 'VERSION')) as f:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='ambition-validators',
+    name='ambition-form-validators',
     version=VERSION,
     author='Erik van Widenfelt',
     author_email='ew2789@gmail.com',
     packages=find_packages(),
     include_package_data=True,
-    url='https://github.com/ambition-trial/ambition-validators',
+    url='https://github.com/ambition-trial/ambition-form-validators',
     license='GPL license, see LICENSE',
-    description='Validators for ambition/edc project',
+    description='Form validators for ambition/edc project',
     long_description=README,
     zip_safe=False,
     keywords='django ambition',

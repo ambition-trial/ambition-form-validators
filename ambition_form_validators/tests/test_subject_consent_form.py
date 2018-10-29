@@ -3,8 +3,8 @@ from django import forms
 from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
 
-from ambition_form_validators import SubjectConsentFormValidator
-from ambition_form_validators import SubjectScreening
+from ..form_validators import SubjectConsentFormValidator
+from .models import SubjectScreening
 
 
 class TestSubjectConsentForm(TestCase):
