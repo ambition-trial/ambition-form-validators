@@ -9,6 +9,16 @@ class PkPdCrfFormValidator(FormValidator):
 
     def clean(self):
 
+        for field in ['amphotericin_formulation',
+                      'amphotericin_dose',
+                      'amphotericin_started_datetime',
+                      'amphotericin_ended_datetime',
+                      'amphotericin_full_dose_given']:
+            self.required_if(
+                YES,
+                field='amphotericin_given',
+                field_required=field)
+
         for num in ['one', 'two', 'three', 'four']:
             self.required_if(
                 YES,
@@ -54,11 +64,6 @@ class PkPdCrfFormValidator(FormValidator):
             NO,
             field='fluconazole_dose_given',
             field_required='fluconazole_dose_reason_missed')
-
-        self.required_if(
-            YES,
-            field='full_ambisome_dose_given',
-            field_required='ambisome_ended_datetime')
 
         self.required_if(
             YES,
