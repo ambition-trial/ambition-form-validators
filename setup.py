@@ -28,6 +28,7 @@ setup(
     install_requires=[
         'ambition-screening',
         'ambition-labs',
+        'ambition-lists',
         'ambition-prn',
         'ambition-sites',
         'ambition-subject',

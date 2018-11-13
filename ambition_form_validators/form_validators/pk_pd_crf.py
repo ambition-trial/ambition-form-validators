@@ -19,42 +19,46 @@ class PkPdCrfFormValidator(FormValidator):
                 field='amphotericin_given',
                 field_required=field)
 
+        # flucytosine
+        # if flucytosine_dose_{num}_given is YES
+        # require datetime, if not, require reason_missed
         for num in ['one', 'two', 'three', 'four']:
             self.required_if(
                 YES,
                 field=f'flucytosine_dose_{num}_given',
                 field_required=f'flucytosine_dose_{num}_datetime')
             self.required_if(
-                YES,
-                field=f'flucytosine_dose_{num}_given',
-                field_required=f'flucytosine_dose_{num}')
-            self.required_if(
                 NO,
                 field=f'flucytosine_dose_{num}_given',
                 field_required=f'flucytosine_dose_reason_missed',
                 inverse=False)
 
-        total_dose = 0
-        total_dose_is_required = False
+        # if flucytosine_dose, require all dose amounts
+        # regardless of given YES or NO
         for num in ['one', 'two', 'three', 'four']:
-            if self.cleaned_data.get(f'flucytosine_dose_{num}_given') == YES:
-                total_dose_is_required = True
+            self.required_if_not_none(
+                field='flucytosine_dose',
+                field_required=f'flucytosine_dose_{num}')
+
+        if self.cleaned_data.get(f'flucytosine_dose') is not None:
+            total_dose = 0
+            for num in ['one', 'two', 'three', 'four']:
                 total_dose += (self.cleaned_data.get(
                     f'flucytosine_dose_{num}') or 0)
-        if total_dose_is_required:
             if total_dose != self.cleaned_data.get(f'flucytosine_dose'):
                 raise ValidationError(
                     {'flucytosine_dose':
                      f'Total Flucytosine dose is incorrect. Expected {total_dose}'},
                     code=INCORRECT_TOTAL_DOSE)
-        else:
-            if self.cleaned_data.get(f'flucytosine_dose'):
-                raise ValidationError(
-                    {'flucytosine_dose':
-                     f'Total Flucytosine dose is incorrect. '
-                     'Doses 1-4 have not been given.'},
-                    code=INCORRECT_TOTAL_DOSE)
+#         else:
+#             if self.cleaned_data.get(f'flucytosine_dose'):
+#                 raise ValidationError(
+#                     {'flucytosine_dose':
+#                      f'Total Flucytosine dose is incorrect. '
+#                      'Doses 1-4 have not been given.'},
+#                     code=INCORRECT_TOTAL_DOSE)
 
+        # fluconazole
         self.required_if(
             YES,
             field='fluconazole_dose_given',

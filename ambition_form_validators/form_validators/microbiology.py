@@ -121,6 +121,16 @@ class MicrobiologyFormValidator(StudyDayFormValidatorMixin, FormValidator):
             field='sputum_genexpert_performed',
             field_applicable='sputum_result_genexpert')
 
+        self.required_if(
+            YES,
+            field='csf_genexpert_performed',
+            field_required='csf_genexpert_date')
+
+        self.applicable_if(
+            YES,
+            field='csf_genexpert_performed',
+            field_applicable='csf_result_genexpert')
+
         self.applicable_if(
             YES,
             field='tissue_biopsy_taken',
