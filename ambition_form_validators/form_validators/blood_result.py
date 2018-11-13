@@ -1,6 +1,6 @@
 from ambition_labs.panels import cd4_panel, viral_load_panel, fbc_panel
 from ambition_labs.panels import chemistry_panel, chemistry_alt_panel
-from ambition_subject.constants import ALREADY_REPORTED
+from ambition_subject.constants import ALREADY_REPORTED, PRESENT_AT_BASELINE
 from ambition_visit_schedule.constants import DAY1
 from django.apps import apps as django_apps
 from django.forms import forms
@@ -113,7 +113,7 @@ class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
             raise forms.ValidationError({field: str(e)})
 
         if grade and grade.grade and reportable != str(grade.grade):
-            if reportable != ALREADY_REPORTED:
+            if reportable not in [ALREADY_REPORTED, PRESENT_AT_BASELINE]:
                 raise forms.ValidationError({
                     field: f'{field.upper()} is reportable. Got {grade.description}.'})
         elif not grade and reportable not in [NO, NOT_APPLICABLE]:
