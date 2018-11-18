@@ -1,4 +1,4 @@
-from edc_constants.constants import YES, OTHER
+from edc_constants.constants import YES, OTHER, NONE
 from edc_form_validators import FormValidator
 
 
@@ -20,6 +20,9 @@ class Week2FormValidator(FormValidator):
             YES,
             field='died',
             field_required='death_date_time')
+
+        self.m2m_single_selection_if(
+            NONE, m2m_field='drug_intervention')
 
         self.m2m_other_specify(
             OTHER,
