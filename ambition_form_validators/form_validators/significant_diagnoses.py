@@ -10,10 +10,10 @@ class SignificantDiagnosesFormValidator(FormValidator):
             or self.cleaned_data.get('week2')
             or self.cleaned_data.get('followup'))
 
-        self.required_if_true(
-            condition=(significant_dx_cls
-                       and significant_dx_cls.other_significant_dx == YES),
-            field_required='possible_diagnoses')
+        if significant_dx_cls:
+            self.required_if_true(
+                condition=significant_dx_cls.other_significant_dx == YES,
+                field_required='possible_diagnoses')
 
         self.required_if(
             YES,
