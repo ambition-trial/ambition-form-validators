@@ -2,9 +2,10 @@ from django.db import models
 from django.db.models import options
 from django.db.models.deletion import PROTECT, CASCADE
 from edc_appointment.models import Appointment
-from edc_base.model_mixins import ListModelMixin, BaseUuidModel
+from edc_base.model_mixins import BaseUuidModel
 from edc_base.utils import get_utcnow
 from edc_constants.choices import YES_NO, YES_NO_NA
+from edc_list_data.model_mixins import ListModelMixin
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 
 
