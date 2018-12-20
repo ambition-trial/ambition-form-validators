@@ -1,4 +1,5 @@
-from edc_constants.constants import FEMALE, YES, NO, MALE
+from django import forms
+from edc_constants.constants import FEMALE, YES, NO, MALE, NOT_APPLICABLE
 from edc_form_validators import FormValidator
 
 
@@ -6,21 +7,32 @@ class SubjectScreeningFormValidator(FormValidator):
 
     def clean(self):
 
-        condition = (
-            self.cleaned_data.get('gender') == FEMALE and
-            self.cleaned_data.get('pregnancy') in [YES, NO])
+        if self.cleaned_data.get('gender') == MALE:
+            self.not_applicable_if(MALE, field='gender',
+                                   field_applicable='pregnancy',
+                                   inverse=False)
 
-        self.required_if_true(
-            condition=condition, field_required='preg_test_date')
+            self.not_required_if(MALE, field='gender',
+                                 field_required='preg_test_date',
+                                 inverse=False)
 
-        self.applicable_if(FEMALE, field='gender',
-                           field_applicable='pregnancy')
+            self.not_applicable_if(MALE, field='gender',
+                                   field_applicable='breast_feeding')
+        else:
 
-        self.not_applicable_if(MALE, field='gender',
-                               field_applicable='pregnancy')
+            # note, for females, if pregnancy == YES, preg_test_date
+            # is optional
 
-        self.not_applicable_if(MALE, field='gender',
-                               field_applicable='breast_feeding')
+            if self.cleaned_data.get('pregnancy') == NO:
+                self.required_if(
+                    FEMALE, field='gender', field_required='preg_test_date')
+            elif (self.cleaned_data.get('pregnancy') == NOT_APPLICABLE
+                  and self.cleaned_data.get('preg_test_date')):
+                raise forms.ValidationError(
+                    {'preg_test_date': 'This field is not required.'})
+
+#             self.required_if(YES, NO, field='pregnancy',
+#                              field_required='breast_feeding')
 
         self.required_if(
             YES,
