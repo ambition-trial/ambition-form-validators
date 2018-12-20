@@ -16,15 +16,6 @@ class TestSubjectScreeningFormValidator(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn('pregnancy', form_validator._errors)
 
-    def test_preg_test_date_yes(self):
-        options = {
-            'gender': FEMALE,
-            'pregnancy': YES,
-            'preg_test_date': None}
-        form_validator = SubjectScreeningFormValidator(cleaned_data=options)
-        self.assertRaises(ValidationError, form_validator.validate)
-        self.assertIn('preg_test_date', form_validator._errors)
-
     def test_preg_test_date_no(self):
         options = {
             'gender': FEMALE,

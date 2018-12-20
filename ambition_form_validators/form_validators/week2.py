@@ -39,6 +39,9 @@ class Week2FormValidator(FormValidator):
             field='blood_received',
             field_required='units')
 
+        self.m2m_single_selection_if(
+            NONE, m2m_field='medicines')
+
         self.m2m_other_specify(
             OTHER,
             m2m_field='medicines',
