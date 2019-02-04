@@ -14,10 +14,9 @@ class MissedDosesFormValidator(FormValidator):
         field_value = self.cleaned_data.get(self.field)
 
         self.required_if_true(
-            condition=field_value in self.day_range,
-            field_required=self.reason_field)
+            condition=field_value in self.day_range, field_required=self.reason_field
+        )
 
         self.required_if(
-            OTHER,
-            field=self.reason_field,
-            field_required=self.reason_other_field)
+            OTHER, field=self.reason_field, field_required=self.reason_other_field
+        )

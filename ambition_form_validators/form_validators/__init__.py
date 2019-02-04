@@ -10,7 +10,9 @@ from .medical_expenses_two_detail import MedicalExpensesTwoDetailFormValidator
 from .microbiology import MicrobiologyFormValidator
 from .patient_history import PatientHistoryFormValidator
 from .pk_pd_crf import PkPdCrfFormValidator, INCORRECT_TOTAL_DOSE
-from .previous_opportunistic_infection import PreviousOpportunisticInfectionFormValidator
+from .previous_opportunistic_infection import (
+    PreviousOpportunisticInfectionFormValidator,
+)
 from .radiology import RadiologyFormValidator
 from .significant_diagnoses import SignificantDiagnosesFormValidator
 from .subject_consent import SubjectConsentFormValidator
