@@ -7,38 +7,30 @@ from ..form_validators import SubjectScreeningFormValidator
 
 
 class TestSubjectScreeningFormValidator(TestCase):
-
     def test_gender(self):
-        options = {
-            'gender': MALE,
-            'pregnancy': YES}
+        options = {"gender": MALE, "pregnancy": YES}
         form_validator = SubjectScreeningFormValidator(cleaned_data=options)
         self.assertRaises(ValidationError, form_validator.validate)
-        self.assertIn('pregnancy', form_validator._errors)
+        self.assertIn("pregnancy", form_validator._errors)
 
     def test_preg_test_date_no(self):
-        options = {
-            'gender': FEMALE,
-            'pregnancy': NO,
-            'preg_test_date': None}
+        options = {"gender": FEMALE, "pregnancy": NO, "preg_test_date": None}
         form_validator = SubjectScreeningFormValidator(cleaned_data=options)
         self.assertRaises(ValidationError, form_validator.validate)
-        self.assertIn('preg_test_date', form_validator._errors)
+        self.assertIn("preg_test_date", form_validator._errors)
 
     def test_preg_test_date_NA(self):
         options = {
-            'gender': MALE,
-            'pregnancy': NOT_APPLICABLE,
-            'preg_test_date': get_utcnow}
+            "gender": MALE,
+            "pregnancy": NOT_APPLICABLE,
+            "preg_test_date": get_utcnow,
+        }
         form_validator = SubjectScreeningFormValidator(cleaned_data=options)
         self.assertRaises(ValidationError, form_validator.validate)
-        self.assertIn('preg_test_date', form_validator._errors)
+        self.assertIn("preg_test_date", form_validator._errors)
 
     def test_gender_male_breast_feeding_invalid(self):
-        options = {
-            'gender': MALE,
-            'pregnancy': NOT_APPLICABLE,
-            'breast_feeding': YES}
+        options = {"gender": MALE, "pregnancy": NOT_APPLICABLE, "breast_feeding": YES}
         form_validator = SubjectScreeningFormValidator(cleaned_data=options)
         self.assertRaises(ValidationError, form_validator.validate)
-        self.assertIn('breast_feeding', form_validator._errors)
+        self.assertIn("breast_feeding", form_validator._errors)

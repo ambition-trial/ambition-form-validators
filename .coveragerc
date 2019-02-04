@@ -1,0 +1,4 @@
+[run]
+include = ambition_form_validators/*
+omit = ambition_form_validators/tests/*
+branch = 1
