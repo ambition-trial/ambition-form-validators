@@ -15,8 +15,7 @@ class PkPdCrfFormValidator(FormValidator):
             "amphotericin_ended_datetime",
             "amphotericin_full_dose_given",
         ]:
-            self.required_if(YES, field="amphotericin_given",
-                             field_required=field)
+            self.required_if(YES, field="amphotericin_given", field_required=field)
 
         # flucytosine
         # if flucytosine_dose_{num}_given is YES
@@ -44,8 +43,7 @@ class PkPdCrfFormValidator(FormValidator):
         if self.cleaned_data.get(f"flucytosine_dose") is not None:
             total_dose = 0
             for num in ["one", "two", "three", "four"]:
-                total_dose += self.cleaned_data.get(
-                    f"flucytosine_dose_{num}") or 0
+                total_dose += self.cleaned_data.get(f"flucytosine_dose_{num}") or 0
             if total_dose != self.cleaned_data.get(f"flucytosine_dose"):
                 raise ValidationError(
                     {
@@ -77,5 +75,4 @@ class PkPdCrfFormValidator(FormValidator):
             inverse=False,
         )
 
-        self.required_if(NO, field="pre_dose_lp",
-                         field_required="post_dose_lp")
+        self.required_if(NO, field="pre_dose_lp", field_required="post_dose_lp")
