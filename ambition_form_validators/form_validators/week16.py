@@ -19,5 +19,6 @@ class Week16FormValidator(FormValidator):
             YES, UNKNOWN, field="patient_alive", field_applicable="illness_problems"
         )
 
-        self.required_if(YES, UNKNOWN, NO, field="patient_alive",
-                         field_required="rankin_score")
+        self.required_if(
+            YES, UNKNOWN, NO, field="patient_alive", field_required="rankin_score"
+        )
