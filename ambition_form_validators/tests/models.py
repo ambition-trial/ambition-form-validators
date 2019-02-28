@@ -1,12 +1,13 @@
 from django.db import models
 from django.db.models import options
 from django.db.models.deletion import PROTECT, CASCADE
-from edc_appointment.models import Appointment
+# from edc_appointment.models import Appointment
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.utils import get_utcnow
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_list_data.model_mixins import ListModelMixin
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
+from edc_appointment.constants import SCHEDULED_APPT
 
 
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ("consent_model",)
@@ -30,6 +31,19 @@ class SubjectConsent(UpdatesOrCreatesRegistrationModelMixin, BaseUuidModel):
     dob = models.DateField()
 
 
+class Appointment(BaseUuidModel):
+
+    subject_identifier = models.CharField(max_length=25)
+
+    appt_datetime = models.DateTimeField(default=get_utcnow)
+
+    appt_reason = models.CharField(max_length=25, default=SCHEDULED_APPT)
+
+    visit_code = models.CharField(max_length=25)
+
+    visit_code_sequence = models.IntegerField(default=0)
+
+
 class SubjectVisit(BaseUuidModel):
 
     appointment = models.OneToOneField(Appointment, on_delete=PROTECT)
@@ -39,8 +53,6 @@ class SubjectVisit(BaseUuidModel):
     visit_code = models.CharField(max_length=25)
 
     visit_code_sequence = models.IntegerField(default=0)
-
-    appointment = models.OneToOneField(Appointment, on_delete=PROTECT)
 
     report_datetime = models.DateTimeField(default=get_utcnow)
 
@@ -80,7 +92,8 @@ class BloodResult(BaseUuidModel):
 
     subject_visit = models.OneToOneField(SubjectVisit, on_delete=PROTECT)
 
-    ft_fields = ["creatinine", "urea", "sodium", "potassium", "magnesium", "alt"]
+    ft_fields = ["creatinine", "urea", "sodium",
+                 "potassium", "magnesium", "alt"]
     cbc_fields = ["haemoglobin", "wbc", "neutrophil", "platelets"]
 
 

@@ -6,13 +6,13 @@ from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 from django.test.utils import override_settings
-from edc_appointment.models import Appointment
 from edc_base import get_utcnow
 from edc_base.sites.utils import add_or_update_django_sites
 from edc_constants.constants import YES, NO, NOT_DONE, NOT_APPLICABLE
 
 from ..form_validators import LumbarPunctureCsfFormValidator
 from .models import (
+    Appointment,
     SubjectConsent,
     SubjectVisit,
     LumbarPunctureCsf,
@@ -40,14 +40,16 @@ class TestLumbarPunctureFormValidator(TestCase):
             appt_datetime=get_utcnow(),
             visit_code=DAY1,
         )
-        self.subject_visit = SubjectVisit.objects.create(appointment=appointment)
+        self.subject_visit = SubjectVisit.objects.create(
+            appointment=appointment)
 
         appointment = Appointment.objects.create(
             subject_identifier=self.subject_consent.subject_identifier,
             appt_datetime=get_utcnow(),
             visit_code=DAY3,
         )
-        self.subject_visit_d3 = SubjectVisit.objects.create(appointment=appointment)
+        self.subject_visit_d3 = SubjectVisit.objects.create(
+            appointment=appointment)
 
     def test_pressure(self):
 
@@ -76,7 +78,8 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn("closing_pressure", form_validator._errors)
         self.assertIn(
-            "Cannot be greater", str(form_validator._errors.get("closing_pressure"))
+            "Cannot be greater", str(
+                form_validator._errors.get("closing_pressure"))
         )
 
     def test_other_csf_culture_required(self):
@@ -106,7 +109,8 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn("other_csf_culture", form_validator._errors)
         self.assertIn(
-            "not required", str(form_validator._errors.get("other_csf_culture"))
+            "not required", str(
+                form_validator._errors.get("other_csf_culture"))
         )
 
     def test_csf_culture_not_perfomed(self):
@@ -121,7 +125,8 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn("other_csf_culture", form_validator._errors)
         self.assertIn(
-            "not required", str(form_validator._errors.get("other_csf_culture"))
+            "not required", str(
+                form_validator._errors.get("other_csf_culture"))
         )
 
     def test_qc_culture(self):
@@ -195,7 +200,8 @@ class TestLumbarPunctureFormValidator(TestCase):
         )
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn(
-            "This field is required", str(form_validator._errors.get("qc_requisition"))
+            "This field is required", str(
+                form_validator._errors.get("qc_requisition"))
         )
 
     def test_qc_assay_datetime_required_if_value(self):
@@ -237,7 +243,8 @@ class TestLumbarPunctureFormValidator(TestCase):
         self.assertIn("india_ink", form_validator._errors)
 
     def test_csf_wbc_cell_count_not_required_day1(self):
-        cleaned_data = {"subject_visit": self.subject_visit, "csf_wbc_cell_count": None}
+        cleaned_data = {"subject_visit": self.subject_visit,
+                        "csf_wbc_cell_count": None}
         form_validator = LumbarPunctureCsfFormValidator(
             cleaned_data=cleaned_data, instance=LumbarPunctureCsf()
         )
@@ -287,7 +294,8 @@ class TestLumbarPunctureFormValidator(TestCase):
         )
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn("csf_cr_ag_lfa", form_validator._errors)
-        self.assertIn("not required", str(form_validator._errors.get("csf_cr_ag_lfa")))
+        self.assertIn("not required", str(
+            form_validator._errors.get("csf_cr_ag_lfa")))
 
     def test_differential_neutrophil_count_percent_limit_passed(self):
         cleaned_data = {
