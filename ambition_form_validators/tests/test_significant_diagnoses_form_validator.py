@@ -2,9 +2,9 @@ from ambition_visit_schedule import DAY1
 from django import forms
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from edc_base import get_utcnow
 from edc_constants.constants import YES, OTHER, NO
 from edc_form_validators import REQUIRED_ERROR
+from edc_utils import get_utcnow
 
 from ..form_validators import SignificantDiagnosesFormValidator
 from .models import SubjectVisit, TestModel, Appointment
@@ -15,8 +15,7 @@ class TestSignificantDiagnosesFormValidator(TestCase):
         appointment = Appointment.objects.create(
             subject_identifier="11111111", appt_datetime=get_utcnow(), visit_code=DAY1
         )
-        self.subject_visit = SubjectVisit.objects.create(
-            appointment=appointment)
+        self.subject_visit = SubjectVisit.objects.create(appointment=appointment)
 
         self.week4 = TestModel.objects.create(
             subject_visit=self.subject_visit, other_significant_dx=YES
@@ -25,8 +24,7 @@ class TestSignificantDiagnosesFormValidator(TestCase):
     def test_week4_no_significant_diagnoses_valid(self):
         self.week4.other_significant_dx = NO
         cleaned_data = {"week4": self.week4, "possible_diagnoses": None}
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=cleaned_data)
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=cleaned_data)
         try:
             form_validator.validate()
         except ValidationError as e:
@@ -34,15 +32,13 @@ class TestSignificantDiagnosesFormValidator(TestCase):
 
     def test_week4_significant_diagnoses_invalid(self):
         cleaned_data = {"week4": self.week4, "possible_diagnoses": None}
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=cleaned_data)
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn("possible_diagnoses", form_validator._errors)
 
     def test_followup_significant_diagnoses_invalid(self):
         cleaned_data = {"followup": self.week4, "possible_diagnoses": None}
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=cleaned_data)
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn("possible_diagnoses", form_validator._errors)
 
@@ -52,8 +48,7 @@ class TestSignificantDiagnosesFormValidator(TestCase):
             "other_significant_diagnoses": YES,
             "possible_diagnoses": None,
         }
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=options)
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=options)
         try:
             form_validator.validate()
         except forms.ValidationError:
@@ -67,8 +62,7 @@ class TestSignificantDiagnosesFormValidator(TestCase):
             "possible_diagnoses": "pulmonary_tb",
             "dx_date": None,
         }
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=options)
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=options)
         try:
             form_validator.validate()
         except forms.ValidationError:
@@ -82,8 +76,7 @@ class TestSignificantDiagnosesFormValidator(TestCase):
             "possible_diagnoses": "extra_pulmonary_tb",
             "dx_date": None,
         }
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=options)
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=options)
         try:
             form_validator.validate()
         except forms.ValidationError:
@@ -97,8 +90,7 @@ class TestSignificantDiagnosesFormValidator(TestCase):
             "possible_diagnoses": "kaposi_sarcoma",
             "dx_date": None,
         }
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=options)
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=options)
         try:
             form_validator.validate()
         except forms.ValidationError:
@@ -112,8 +104,7 @@ class TestSignificantDiagnosesFormValidator(TestCase):
             "possible_diagnoses": "malaria",
             "dx_date": None,
         }
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=options)
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=options)
         try:
             form_validator.validate()
         except forms.ValidationError:
@@ -127,8 +118,7 @@ class TestSignificantDiagnosesFormValidator(TestCase):
             "possible_diagnoses": "bacteraemia",
             "dx_date": None,
         }
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=options)
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=options)
         try:
             form_validator.validate()
         except forms.ValidationError:
@@ -142,8 +132,7 @@ class TestSignificantDiagnosesFormValidator(TestCase):
             "possible_diagnoses": "pneumonia",
             "dx_date": None,
         }
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=options)
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=options)
         try:
             form_validator.validate()
         except forms.ValidationError:
@@ -157,8 +146,7 @@ class TestSignificantDiagnosesFormValidator(TestCase):
             "possible_diagnoses": "diarrhoeal_wasting",
             "dx_date": None,
         }
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=options)
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=options)
         try:
             form_validator.validate()
         except forms.ValidationError:
@@ -167,10 +155,8 @@ class TestSignificantDiagnosesFormValidator(TestCase):
         self.assertIn(REQUIRED_ERROR, form_validator._error_codes)
 
     def test_possible_diagnoses_dx_other(self):
-        options = {"week4": self.week4,
-                   "possible_diagnoses": OTHER, "dx_other": None}
-        form_validator = SignificantDiagnosesFormValidator(
-            cleaned_data=options)
+        options = {"week4": self.week4, "possible_diagnoses": OTHER, "dx_other": None}
+        form_validator = SignificantDiagnosesFormValidator(cleaned_data=options)
         try:
             form_validator.validate()
         except forms.ValidationError:

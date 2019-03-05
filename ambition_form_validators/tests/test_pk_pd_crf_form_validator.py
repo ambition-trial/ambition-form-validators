@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
-from edc_base.utils import get_utcnow
 from edc_constants.constants import NO, YES
+from edc_utils import get_utcnow
 
 from ..form_validators import PkPdCrfFormValidator
 
@@ -15,8 +15,7 @@ class TestPkPdCrfFormValidator(TestCase):
             }
             form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
             self.assertRaises(ValidationError, form_validator.validate)
-            self.assertIn(
-                f"flucytosine_dose_{num}_datetime", form_validator._errors)
+            self.assertIn(f"flucytosine_dose_{num}_datetime", form_validator._errors)
 
     def test_flucytosine_dose_given_no_datetime_not_required(self):
         for num in ["one", "two", "three", "four"]:
@@ -26,8 +25,7 @@ class TestPkPdCrfFormValidator(TestCase):
             }
             form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
             self.assertRaises(ValidationError, form_validator.validate)
-            self.assertIn(
-                f"flucytosine_dose_{num}_datetime", form_validator._errors)
+            self.assertIn(f"flucytosine_dose_{num}_datetime", form_validator._errors)
 
     def test_if_flucytosine_dose_then_all_doses_required(self):
         cleaned_data = {f"flucytosine_dose": 1000}
@@ -108,8 +106,7 @@ class TestPkPdCrfFormValidator(TestCase):
         self.assertIn("fluconazole_dose_reason_missed", form_validator._errors)
 
     def test_full_ambisome_dose_given_yes(self):
-        cleaned_data = {"amphotericin_given": YES,
-                        "amphotericin_formulation": None}
+        cleaned_data = {"amphotericin_given": YES, "amphotericin_formulation": None}
         for field in [
             "amphotericin_formulation",
             "amphotericin_dose",
@@ -123,8 +120,7 @@ class TestPkPdCrfFormValidator(TestCase):
             cleaned_data.update({field: "some value"})
 
     def test_blood_sample_missed_no_reason_missed_none(self):
-        cleaned_data = {"blood_sample_missed": YES,
-                        "blood_sample_reason_missed": None}
+        cleaned_data = {"blood_sample_missed": YES, "blood_sample_reason_missed": None}
         form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn("blood_sample_reason_missed", form_validator._errors)

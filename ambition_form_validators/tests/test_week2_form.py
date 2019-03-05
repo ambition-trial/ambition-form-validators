@@ -2,8 +2,8 @@ from ambition_visit_schedule import DAY1
 from django import forms
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, OTHER
+from edc_utils import get_utcnow
 
 from ..form_validators import Week2FormValidator, SignificantDiagnosesFormValidator
 from ..form_validators import FluconazoleMissedDosesFormValidator
@@ -77,8 +77,7 @@ class TestSignificantDiagnosesForm(TestCase):
         appointment = Appointment.objects.create(
             subject_identifier="11111111", appt_datetime=get_utcnow(), visit_code=DAY1
         )
-        self.subject_visit = SubjectVisit.objects.create(
-            appointment=appointment)
+        self.subject_visit = SubjectVisit.objects.create(appointment=appointment)
 
         self.week2 = TestModel.objects.create(
             subject_visit=self.subject_visit, other_significant_dx=YES

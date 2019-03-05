@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO, NORMAL, OTHER, NOT_APPLICABLE
+from edc_utils import get_utcnow
 
 from ..form_validators import RadiologyFormValidator
 from .models import ListModel

@@ -5,12 +5,12 @@ from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 from django.test.utils import override_settings
-from edc_base.sites.utils import add_or_update_django_sites
-from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO, POS, NOT_APPLICABLE
 from edc_reportable import GRAMS_PER_DECILITER, IU_LITER, TEN_X_9_PER_LITER
 from edc_reportable import MICROMOLES_PER_LITER, MILLIGRAMS_PER_DECILITER
 from edc_reportable import MILLIMOLES_PER_LITER
+from edc_sites.utils import add_or_update_django_sites
+from edc_utils import get_utcnow
 
 from ..form_validators import BloodResultFormValidator
 from .models import SubjectVisit, SubjectConsent, BloodResult, Appointment
@@ -37,8 +37,7 @@ class TestBloodResultFormValidator(TestCase):
             appt_datetime=get_utcnow(),
             visit_code=DAY1,
         )
-        self.subject_visit = SubjectVisit.objects.create(
-            appointment=appointment)
+        self.subject_visit = SubjectVisit.objects.create(appointment=appointment)
 
         self.cleaned_data = {
             "haemoglobin": 15,
@@ -170,8 +169,7 @@ class TestBloodResultFormValidator(TestCase):
 
     def test_creatinine_umol(self):
 
-        self.cleaned_data.update(
-            creatinine=100, creatinine_units=MICROMOLES_PER_LITER)
+        self.cleaned_data.update(creatinine=100, creatinine_units=MICROMOLES_PER_LITER)
         form_validator = BloodResultFormValidator(
             cleaned_data=self.cleaned_data, instance=BloodResult()
         )

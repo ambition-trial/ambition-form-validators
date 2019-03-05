@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
-from edc_base.utils import get_utcnow
 from edc_constants.constants import MALE, YES, NOT_APPLICABLE, NO, FEMALE
+from edc_utils import get_utcnow
 
 from ..form_validators import SubjectScreeningFormValidator
 
