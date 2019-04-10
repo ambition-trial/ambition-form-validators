@@ -40,7 +40,6 @@ setup(
         'ambition-subject',
         'ambition-visit-schedule',
         'edc-appointment',
-        'edc-base',
         'edc_constants',
         'edc-form-validators',
         'edc-lab',
