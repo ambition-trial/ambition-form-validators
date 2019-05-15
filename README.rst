@@ -1,7 +1,7 @@
 |pypi| |travis| |codecov| |downloads|
 
 ambition-form-validators
------------------
+------------------------
 
 .. |pypi| image:: https://img.shields.io/pypi/v/ambition-form-validators.svg
     :target: https://pypi.python.org/pypi/ambition-form-validators
