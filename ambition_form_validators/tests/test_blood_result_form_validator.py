@@ -16,6 +16,7 @@ from ..form_validators import BloodResultFormValidator
 from .models import SubjectVisit, SubjectConsent, BloodResult, Appointment
 
 
+@tag("4")
 class TestBloodResultFormValidator(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -37,7 +38,8 @@ class TestBloodResultFormValidator(TestCase):
             appt_datetime=get_utcnow(),
             visit_code=DAY1,
         )
-        self.subject_visit = SubjectVisit.objects.create(appointment=appointment)
+        self.subject_visit = SubjectVisit.objects.create(
+            appointment=appointment)
 
         self.cleaned_data = {
             "haemoglobin": 15,
@@ -169,7 +171,8 @@ class TestBloodResultFormValidator(TestCase):
 
     def test_creatinine_umol(self):
 
-        self.cleaned_data.update(creatinine=100, creatinine_units=MICROMOLES_PER_LITER)
+        self.cleaned_data.update(
+            creatinine=100, creatinine_units=MICROMOLES_PER_LITER)
         form_validator = BloodResultFormValidator(
             cleaned_data=self.cleaned_data, instance=BloodResult()
         )
