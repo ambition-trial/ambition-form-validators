@@ -23,10 +23,6 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
 
         self.validate_current_arv_date()
 
-        self.applicable_if(
-            YES, field="taking_arv", field_applicable="current_arv_regimen"
-        )
-
         self.validate_current_arv_regimen()
 
         self.applicable_if(
