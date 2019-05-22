@@ -7,12 +7,12 @@ from django.forms import forms
 from edc_constants.constants import YES, NOT_APPLICABLE
 from edc_form_validators import FormValidator
 from edc_lab import CrfRequisitionFormValidatorMixin
-from edc_reportable import (
-    GRADE3, GRADE4, ReportablesFormValidatorMixin)
+from edc_reportable import GRADE3, GRADE4, ReportablesFormValidatorMixin
 
 
-class BloodResultFormValidator(ReportablesFormValidatorMixin,
-                               CrfRequisitionFormValidatorMixin, FormValidator):
+class BloodResultFormValidator(
+    ReportablesFormValidatorMixin, CrfRequisitionFormValidatorMixin, FormValidator
+):
 
     reportable_grades = [GRADE3, GRADE4]
 
@@ -40,14 +40,12 @@ class BloodResultFormValidator(ReportablesFormValidatorMixin,
             ),
             field_required="cbc_requisition",
         )
-        self.validate_requisition(
-            "cbc_requisition", "cbc_assay_datetime", fbc_panel)
+        self.validate_requisition("cbc_requisition", "cbc_assay_datetime", fbc_panel)
 
         self.required_if_true(
             self.cleaned_data.get("cd4") is not None, field_required="cd4_requisition"
         )
-        self.validate_requisition(
-            "cd4_requisition", "cd4_assay_datetime", cd4_panel)
+        self.validate_requisition("cd4_requisition", "cd4_assay_datetime", cd4_panel)
 
         self.required_if_true(
             self.cleaned_data.get("vl") is not None, field_required="vl_requisition"
@@ -83,10 +81,8 @@ class BloodResultFormValidator(ReportablesFormValidatorMixin,
 
     def validate_reportable_fields(self):
         subject_visit = self.cleaned_data.get("subject_visit")
-        RegisteredSubject = django_apps.get_model(
-            "edc_registration.registeredsubject")
-        subject_identifier = self.cleaned_data.get(
-            "subject_visit").subject_identifier
+        RegisteredSubject = django_apps.get_model("edc_registration.registeredsubject")
+        subject_identifier = self.cleaned_data.get("subject_visit").subject_identifier
         registered_subject = RegisteredSubject.objects.get(
             subject_identifier=subject_identifier
         )
@@ -105,5 +101,4 @@ class BloodResultFormValidator(ReportablesFormValidatorMixin,
         self.applicable_if(
             YES, field="results_abnormal", field_applicable="results_reportable"
         )
-        reportables.validate_results_reportable_field(
-            responses=self.reportable_grades)
+        reportables.validate_results_reportable_field(responses=self.reportable_grades)

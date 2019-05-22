@@ -5,8 +5,9 @@ from ...constants import HEADACHE, VISUAL_LOSS
 from .arv_treatment_and_monitoring import ArvTreatmentAndMonitoringFormValidatorMixin
 
 
-class PatientHistoryFormValidator(ArvTreatmentAndMonitoringFormValidatorMixin,
-                                  FormValidator):
+class PatientHistoryFormValidator(
+    ArvTreatmentAndMonitoringFormValidatorMixin, FormValidator
+):
     def clean(self):
 
         self.m2m_other_specify(
