@@ -64,7 +64,7 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
     def validate_initial_arv_regimen(self):
 
         self.m2m_single_selection_if(
-            OTHER, NOT_APPLICABLE, UNKNOWN, m2m_field="initial_arv_regimen",
+            NOT_APPLICABLE, UNKNOWN, m2m_field="initial_arv_regimen",
         )
 
         self.m2m_applicable_if(YES, field="taking_arv",
@@ -78,13 +78,13 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
 
     def validate_current_arv_regimen(self):
         self.m2m_single_selection_if(
-            OTHER, NOT_APPLICABLE, UNKNOWN, m2m_field="current_arv_regimen",
+            NOT_APPLICABLE, UNKNOWN, m2m_field="current_arv_regimen",
         )
 
         self.m2m_selections_not_expected(
             UNKNOWN, m2m_field="current_arv_regimen")
 
-        self.m2m_applicable_if(YES, field="taking_arv",
+        self.m2m_applicable_if(YES, field="has_switched_regimen",
                                m2m_field="current_arv_regimen")
 
         self.m2m_other_specify(
