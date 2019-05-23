@@ -58,7 +58,7 @@ class TestWeek16Form(TestCase):
             "patient_alive": YES,
             "activities_help": YES,
             "illness_problems": YES,
-            "rankin_score": None,
+            "rankin_score": NOT_APPLICABLE,
         }
         week16 = Week16FormValidator(cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, week16.validate)

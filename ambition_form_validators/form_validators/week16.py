@@ -12,13 +12,13 @@ class Week16FormValidator(FormValidator):
             inverse=False,
         )
         self.applicable_if(
-            YES, UNKNOWN, field="patient_alive", field_applicable="activities_help"
+            YES, field="patient_alive", field_applicable="activities_help"
         )
 
         self.applicable_if(
-            YES, UNKNOWN, field="patient_alive", field_applicable="illness_problems"
+            YES, field="patient_alive", field_applicable="illness_problems"
         )
 
-        self.required_if(
-            YES, UNKNOWN, NO, field="patient_alive", field_required="rankin_score"
+        self.applicable_if(
+            YES, NO, field="patient_alive", field_applicable="rankin_score"
         )
