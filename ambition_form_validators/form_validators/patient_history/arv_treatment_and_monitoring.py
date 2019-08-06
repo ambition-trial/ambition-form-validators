@@ -6,7 +6,8 @@ from edc_registration import get_registered_subject
 
 class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
     def validate_arv_treatment_and_monitoring(self):
-        self.applicable_if(NO, field="new_hiv_diagnosis", field_applicable="taking_arv")
+        self.applicable_if(NO, field="new_hiv_diagnosis",
+                           field_applicable="taking_arv")
 
         self.validate_initial_arv_date()
 
@@ -65,7 +66,8 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
             NOT_APPLICABLE, UNKNOWN, m2m_field="initial_arv_regimen"
         )
 
-        self.m2m_applicable_if(YES, field="taking_arv", m2m_field="initial_arv_regimen")
+        self.m2m_applicable_if(YES, field="taking_arv",
+                               m2m_field="initial_arv_regimen")
 
         self.m2m_other_specify(
             OTHER,
@@ -79,7 +81,8 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
             NOT_APPLICABLE, UNKNOWN, m2m_field="current_arv_regimen"
         )
 
-        self.m2m_selections_not_expected(UNKNOWN, m2m_field="current_arv_regimen")
+        self.m2m_selections_not_expected(
+            UNKNOWN, m2m_field="current_arv_regimen")
 
         self.m2m_applicable_if(
             YES, field="has_switched_regimen", m2m_field="current_arv_regimen"
@@ -92,7 +95,8 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
         )
 
     def validate_initial_arv_date(self):
-        self.required_if(YES, field="taking_arv", field_required="initial_arv_date")
+        self.required_if(YES, field="taking_arv",
+                         field_required="initial_arv_date")
 
         if self.cleaned_data.get("taking_arv") == YES:
             try:
@@ -113,7 +117,8 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
             )
             try:
                 days = (
-                    self.cleaned_data.get("initial_arv_date") - registered_subject.dob
+                    self.cleaned_data.get(
+                        "initial_arv_date") - registered_subject.dob
                 ).days
             except TypeError:
                 pass
@@ -121,7 +126,8 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
                 if days < 0:
                     raise forms.ValidationError(
                         {
-                            "initial_arv_date": "Date cannot be before subject's date of birth."
+                            "initial_arv_date": (
+                                "Date cannot be before subject's date of birth.")
                         }
                     )
 
@@ -148,13 +154,15 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
                 if days == 0:
                     raise forms.ValidationError(
                         {
-                            "current_arv_date": "Date cannot equal to the initial ARV date."
+                            "current_arv_date": (
+                                "Date cannot equal to the initial ARV date.")
                         }
                     )
                 elif days < 0:
                     raise forms.ValidationError(
                         {
-                            "current_arv_date": "Date cannot be before the initial ARV date."
+                            "current_arv_date": (
+                                "Date cannot be before the initial ARV date.")
                         }
                     )
         self.not_applicable(
@@ -181,13 +189,15 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
                 if days == 0:
                     raise forms.ValidationError(
                         {
-                            "current_arv_defaulted_date": "Date cannot equal to the initial ARV date."
+                            "current_arv_defaulted_date": (
+                                "Date cannot equal to the initial ARV date.")
                         }
                     )
                 elif days < 0:
                     raise forms.ValidationError(
                         {
-                            "current_arv_defaulted_date": "Date cannot be before the initial ARV date."
+                            "current_arv_defaulted_date": (
+                                "Date cannot be before the initial ARV date.")
                         }
                     )
         self.not_applicable(
