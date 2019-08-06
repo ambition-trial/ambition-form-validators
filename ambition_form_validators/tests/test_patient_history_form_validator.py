@@ -128,17 +128,18 @@ class TestPatientHistoryFormValidator(TestCase):
         self.assertRaises(ValidationError, form.validate)
         self.assertIn("initial_arv_regimen_other", form._errors)
 
-    @tag("1")
-    def test_taking_arv_patient_adherence_no(self):
-        ListModel.objects.create(name=NOT_APPLICABLE, short_name=NOT_APPLICABLE)
-        cleaned_data = {
-            "taking_arv": NO,
-            "initial_arv_regimen": ListModel.objects.all(),
-            "current_arv_is_adherent": YES,
-        }
-        form = PatientHistoryFormValidator(cleaned_data=cleaned_data)
-        self.assertRaises(ValidationError, form.validate)
-        self.assertIn("current_arv_is_adherent", form._errors)
+    #     @tag("1")
+    #     def test_taking_arv_patient_adherence_no(self):
+    #         ListModel.objects.create(
+    #             name=NOT_APPLICABLE, short_name=NOT_APPLICABLE)
+    #         cleaned_data = {
+    #             "taking_arv": NO,
+    #             "initial_arv_regimen": ListModel.objects.all(),
+    #             "current_arv_is_adherent": YES,
+    #         }
+    #         form = PatientHistoryFormValidator(cleaned_data=cleaned_data)
+    #         self.assertRaises(ValidationError, form.validate)
+    #         self.assertIn("current_arv_is_adherent", form._errors)
 
     def test_current_arv_regimen_other_none_invalid(self):
         ListModel.objects.create(name=OTHER, short_name=OTHER)
@@ -151,11 +152,11 @@ class TestPatientHistoryFormValidator(TestCase):
         self.assertRaises(ValidationError, form.validate)
         self.assertIn("current_arv_regimen_other", form._errors)
 
-    def test_taking_arv_patient_adherence_none_invalid(self):
-        cleaned_data = {"taking_arv": NO, "current_arv_is_adherent": None}
-        form = PatientHistoryFormValidator(cleaned_data=cleaned_data)
-        self.assertRaises(ValidationError, form.validate)
-        self.assertIn("current_arv_is_adherent", form._errors)
+    #     def test_taking_arv_patient_adherence_none_invalid(self):
+    #         cleaned_data = {"taking_arv": NO, "current_arv_is_adherent": None}
+    #         form = PatientHistoryFormValidator(cleaned_data=cleaned_data)
+    #         self.assertRaises(ValidationError, form.validate)
+    #         self.assertIn("current_arv_is_adherent", form._errors)
 
     def test_no_last_viral_load_date_invalid(self):
         cleaned_data = {"last_viral_load": None, "viral_load_date": get_utcnow()}

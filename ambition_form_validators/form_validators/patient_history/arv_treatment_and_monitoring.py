@@ -121,7 +121,9 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
                 if days < 0:
                     raise forms.ValidationError(
                         {
-                            "initial_arv_date": "Date cannot be before subject's date of birth."
+                            "initial_arv_date": (
+                                "Date cannot be before subject's date of birth."
+                            )
                         }
                     )
 
@@ -148,13 +150,17 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
                 if days == 0:
                     raise forms.ValidationError(
                         {
-                            "current_arv_date": "Date cannot equal to the initial ARV date."
+                            "current_arv_date": (
+                                "Date cannot equal to the initial ARV date."
+                            )
                         }
                     )
                 elif days < 0:
                     raise forms.ValidationError(
                         {
-                            "current_arv_date": "Date cannot be before the initial ARV date."
+                            "current_arv_date": (
+                                "Date cannot be before the initial ARV date."
+                            )
                         }
                     )
         self.not_applicable(
@@ -181,13 +187,17 @@ class ArvTreatmentAndMonitoringFormValidatorMixin(FormValidator):
                 if days == 0:
                     raise forms.ValidationError(
                         {
-                            "current_arv_defaulted_date": "Date cannot equal to the initial ARV date."
+                            "current_arv_defaulted_date": (
+                                "Date cannot equal to the initial ARV date."
+                            )
                         }
                     )
                 elif days < 0:
                     raise forms.ValidationError(
                         {
-                            "current_arv_defaulted_date": "Date cannot be before the initial ARV date."
+                            "current_arv_defaulted_date": (
+                                "Date cannot be before the initial ARV date."
+                            )
                         }
                     )
         self.not_applicable(
