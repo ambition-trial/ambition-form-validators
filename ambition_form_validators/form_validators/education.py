@@ -8,7 +8,7 @@ class EducationFormValidator(FormValidator):
 
         self.validate_education_years()
 
-        self.required_if(YES, field="elementary", field_required="attendance_years")
+        self.required_if(YES, field="elementary", field_required="elementary_years")
 
         self.required_if(YES, field="secondary", field_required="secondary_years")
 
@@ -18,20 +18,17 @@ class EducationFormValidator(FormValidator):
         """Raises if the total years of education is not
         the sum of the years spent in primary/secondary/higher.
         """
-        attendance_years = self.cleaned_data.get("attendance_years")
-        secondary_years = self.cleaned_data.get("secondary_years")
-        higher_years = self.cleaned_data.get("higher_years")
-        education_years = self.cleaned_data.get("education_years")
-        try:
-            education_sum = attendance_years + secondary_years + higher_years
-        except TypeError:
-            pass
-        else:
-            if education_sum != education_years:
-                raise forms.ValidationError(
-                    {
-                        "education_years": "The total years of education should be the sum of "
-                        "the years spent in primary/secondary/higher."
-                        f"Expected {education_sum}."
-                    }
-                )
+        elementary_years = self.cleaned_data.get("elementary_years") or 0
+        secondary_years = self.cleaned_data.get("secondary_years") or 0
+        higher_years = self.cleaned_data.get("higher_years") or 0
+        education_years = self.cleaned_data.get("education_years") or 0
+        calculated_total = elementary_years + secondary_years + higher_years
+        if calculated_total != education_years or 0:
+            raise forms.ValidationError(
+                {
+                    "education_years": "Incorrect.  "
+                    f"Expected {elementary_years}+{secondary_years}+"
+                    f"{higher_years}={calculated_total}. ("
+                    f"The sum of the years spent in primary/secondary/higher)"
+                }
+            )
