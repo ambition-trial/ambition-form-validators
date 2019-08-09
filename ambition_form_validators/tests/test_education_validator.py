@@ -30,20 +30,20 @@ class TestEducationalBackgroundFormValidator(TestCase):
         except ValidationError as e:
             self.fail(f"ValidationError unexpectedly raised. Got{e}")
 
-    def test_attendance_years(self):
-        cleaned_data = {"elementary": NO, "elementary_years": 1}
+    def test_elementary_years(self):
+        cleaned_data = {"elementary": NO, "elementary_years": 1, "education_years": 1}
         form = EducationFormValidator(cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form.validate)
         self.assertIn("elementary_years", form._errors)
 
     def test_secondary_years(self):
-        cleaned_data = {"secondary": NO, "secondary_years": 1}
+        cleaned_data = {"secondary": NO, "secondary_years": 1, "education_years": 1}
         form = EducationFormValidator(cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form.validate)
         self.assertIn("secondary_years", form._errors)
 
     def test_higher_education(self):
-        cleaned_data = {"higher_education": NO, "higher_years": 1}
+        cleaned_data = {"higher_education": NO, "higher_years": 1, "education_years": 1}
         form = EducationFormValidator(cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form.validate)
         self.assertIn("higher_years", form._errors)

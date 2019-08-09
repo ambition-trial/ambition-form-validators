@@ -29,6 +29,8 @@ class EducationFormValidator(FormValidator):
                     "education_years": "Incorrect.  "
                     f"Expected {elementary_years}+{secondary_years}+"
                     f"{higher_years}={calculated_total}. ("
-                    f"The sum of the years spent in primary/secondary/higher)"
+                    f"The sum of the years spent in primary/secondary/higher) "
+                    f"Got {elementary_years}+{secondary_years}+"
+                    f"{higher_years}={education_years}."
                 }
             )
