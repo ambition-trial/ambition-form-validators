@@ -15,9 +15,22 @@ class PkPdCrfFormValidator(FormValidator):
             "amphotericin_ended_datetime",
             "amphotericin_full_dose_given",
         ]:
-            self.required_if(YES, field="amphotericin_given", field_required=field)
+            self.required_if(
+                YES,
+                field="amphotericin_given",
+                field_required=field,
+                required_msg="[010]",
+            )
 
         # flucytosine
+        # if flucytosine_dose, require all dose given
+        for num in ["one", "two", "three", "four"]:
+            self.required_if_not_none(
+                field="flucytosine_dose",
+                field_required=f"flucytosine_dose_{num}_given",
+                required_msg="[015]",
+            )
+
         # if flucytosine_dose_{num}_given is YES
         # require datetime, if not, require reason_missed
         for num in ["one", "two", "three", "four"]:
@@ -25,19 +38,23 @@ class PkPdCrfFormValidator(FormValidator):
                 YES,
                 field=f"flucytosine_dose_{num}_given",
                 field_required=f"flucytosine_dose_{num}_datetime",
+                required_msg="[020]",
             )
             self.required_if(
                 NO,
                 field=f"flucytosine_dose_{num}_given",
                 field_required=f"flucytosine_dose_reason_missed",
                 inverse=False,
+                required_msg="[030]",
             )
 
         # if flucytosine_dose, require all dose amounts
         # regardless of given YES or NO
         for num in ["one", "two", "three", "four"]:
             self.required_if_not_none(
-                field="flucytosine_dose", field_required=f"flucytosine_dose_{num}"
+                field="flucytosine_dose",
+                field_required=f"flucytosine_dose_{num}",
+                required_msg="Enter the actual or expected dose. [040]",
             )
 
         if self.cleaned_data.get(f"flucytosine_dose") is not None:
@@ -49,7 +66,7 @@ class PkPdCrfFormValidator(FormValidator):
                     {
                         "flucytosine_dose": (
                             f"Total Flucytosine dose is incorrect. "
-                            f"Expected {total_dose}"
+                            f"Expected {total_dose} [050]"
                         )
                     },
                     code=INCORRECT_TOTAL_DOSE,
@@ -60,12 +77,14 @@ class PkPdCrfFormValidator(FormValidator):
             YES,
             field="fluconazole_dose_given",
             field_required="fluconazole_dose_datetime",
+            required_msg="[060]",
         )
 
         self.required_if(
             NO,
             field="fluconazole_dose_given",
             field_required="fluconazole_dose_reason_missed",
+            required_msg="[070]",
         )
 
         self.required_if(
@@ -73,6 +92,9 @@ class PkPdCrfFormValidator(FormValidator):
             field="blood_sample_missed",
             field_required="blood_sample_reason_missed",
             inverse=False,
+            required_msg="[080]",
         )
 
-        self.required_if(NO, field="pre_dose_lp", field_required="post_dose_lp")
+        self.required_if(
+            NO, field="pre_dose_lp", field_required="post_dose_lp", required_msg="[090]"
+        )

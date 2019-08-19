@@ -8,34 +8,30 @@ from ..form_validators import PkPdCrfFormValidator
 
 class TestPkPdCrfFormValidator(TestCase):
     def test_flucytosine_dose_given_yes_datetime_required(self):
+        cleaned_data = {"flucytosine_dose": 4500}
         for num in ["one", "two", "three", "four"]:
-            cleaned_data = {
-                f"flucytosine_dose_{num}_given": YES,
-                f"flucytosine_dose_{num}_datetime": None,
-            }
-            form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
-            self.assertRaises(ValidationError, form_validator.validate)
-            self.assertIn(f"flucytosine_dose_{num}_datetime", form_validator._errors)
+            cleaned_data.update(
+                {
+                    f"flucytosine_dose_{num}_given": YES,
+                    f"flucytosine_do)se_{num}_datetime": None,
+                }
+            )
+        form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn(f"flucytosine_dose_one_datetime", form_validator._errors)
 
     def test_flucytosine_dose_given_no_datetime_not_required(self):
+        cleaned_data = {"flucytosine_dose": 4500}
         for num in ["one", "two", "three", "four"]:
-            cleaned_data = {
-                f"flucytosine_dose_{num}_given": NO,
-                f"flucytosine_dose_{num}_datetime": get_utcnow(),
-            }
-            form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
-            self.assertRaises(ValidationError, form_validator.validate)
-            self.assertIn(f"flucytosine_dose_{num}_datetime", form_validator._errors)
-
-    def test_if_flucytosine_dose_then_all_doses_required(self):
-        cleaned_data = {f"flucytosine_dose": 1000}
-        for num in ["one", "two", "three", "four"]:
-            cleaned_data.update({f"flucytosine_dose_{num}": None})
-        for num in ["one", "two", "three", "four"]:
-            form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
-            self.assertRaises(ValidationError, form_validator.validate)
-            self.assertIn(f"flucytosine_dose_{num}", form_validator._errors)
-            cleaned_data.update({f"flucytosine_dose_{num}": 100})
+            cleaned_data.update(
+                {
+                    f"flucytosine_dose_{num}_given": NO,
+                    f"flucytosine_dose_{num}_datetime": get_utcnow(),
+                }
+            )
+        form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn(f"flucytosine_dose_one_datetime", form_validator._errors)
 
     def test_flucytosine_dose_total_incorrect(self):
 
@@ -43,6 +39,8 @@ class TestPkPdCrfFormValidator(TestCase):
         cleaned_data = {"flucytosine_dose": 1}
         for num in ["one", "two", "three", "four"]:
             cleaned_data.update({f"flucytosine_dose_{num}": 5})
+            cleaned_data.update({f"flucytosine_dose_{num}_given": YES})
+            cleaned_data.update({f"flucytosine_dose_{num}_datetime": get_utcnow()})
         form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn("flucytosine_dose", form_validator._errors)
@@ -51,7 +49,35 @@ class TestPkPdCrfFormValidator(TestCase):
         # enter correct total, all dose amounts shown
         cleaned_data = {"flucytosine_dose": 20}
         for num in ["one", "two", "three", "four"]:
-            cleaned_data.update({f"flucytosine_dose_{num}": 5})
+            cleaned_data.update(
+                {
+                    f"flucytosine_dose_{num}_given": YES,
+                    f"flucytosine_dose_{num}_datetime": get_utcnow(),
+                    f"flucytosine_dose_{num}": 5,
+                }
+            )
+        form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
+        try:
+            form_validator.validate()
+        except ValidationError as e:
+            self.fail(f"Validation error unexpectedly raised. Got {e}")
+
+    def test_flucytosine_dose_total_correct2(self):
+        # enter correct total, all dose amounts shown
+        cleaned_data = {"flucytosine_dose": 40}
+        for num in ["one", "two"]:
+            cleaned_data.update(
+                {
+                    f"flucytosine_dose_{num}_given": YES,
+                    f"flucytosine_dose_{num}_datetime": get_utcnow(),
+                    f"flucytosine_dose_{num}": 10,
+                }
+            )
+        for num in ["three", "four"]:
+            cleaned_data.update(
+                {f"flucytosine_dose_{num}_given": NO, f"flucytosine_dose_{num}": 10}
+            )
+        cleaned_data.update({"flucytosine_dose_reason_missed": "blah"})
         form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
         try:
             form_validator.validate()
@@ -60,9 +86,21 @@ class TestPkPdCrfFormValidator(TestCase):
 
     def test_flucytosine_missing_doses(self):
         # try total when not all doses given
-        cleaned_data = {"flucytosine_dose": 20}
+        cleaned_data = {"flucytosine_dose": 40}
         for num in ["one", "two", "three"]:  # skip 'four'
-            cleaned_data.update({f"flucytosine_dose_{num}": 5})
+            cleaned_data.update(
+                {
+                    f"flucytosine_dose_{num}_given": YES,
+                    f"flucytosine_dose_{num}_datetime": get_utcnow(),
+                    f"flucytosine_dose_{num}": 10,
+                }
+            )
+        cleaned_data.update(
+            {
+                f"flucytosine_dose_four_given": YES,
+                f"flucytosine_dose_four_datetime": get_utcnow(),
+            }
+        )
         form_validator = PkPdCrfFormValidator(cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn("flucytosine_dose_four", form_validator._errors)
