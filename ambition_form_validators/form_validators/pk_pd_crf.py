@@ -50,12 +50,28 @@ class PkPdCrfFormValidator(FormValidator):
 
         # if flucytosine_dose, require all dose amounts
         # regardless of given YES or NO
-        for num in ["one", "two", "three", "four"]:
+        for num in ["one", "two"]:
             self.required_if_not_none(
                 field="flucytosine_dose",
                 field_required=f"flucytosine_dose_{num}",
                 required_msg="Enter the actual or expected dose. [040]",
             )
+
+        for num in ["three", "four"]:
+            self.required_if(
+                YES,
+                NO,
+                field=f"flucytosine_dose_{num}_given",
+                field_required=f"flucytosine_dose_{num}",
+                required_msg="[016]",
+            )
+
+        #         for num in ["three", "four"]:
+        #             self.required_integer_if_not_none(
+        #                 field="flucytosine_dose",
+        #                 field_required=f"flucytosine_dose_{num}",
+        #                 required_msg="Enter the actual or expected dose. [041]",
+        #             )
 
         if self.cleaned_data.get(f"flucytosine_dose") is not None:
             total_dose = 0
