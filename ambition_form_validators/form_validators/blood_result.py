@@ -1,7 +1,6 @@
 from ambition_labs.panels import cd4_panel, viral_load_panel, fbc_panel
 from ambition_labs.panels import chemistry_panel, chemistry_alt_panel
 from ambition_visit_schedule.constants import DAY1
-from copy import copy
 from django.apps import apps as django_apps
 from django.forms import forms
 from edc_constants.constants import YES, NOT_APPLICABLE
@@ -54,7 +53,7 @@ class BloodResultFormValidator(
             "vl_requisition", "vl_assay_datetime", viral_load_panel
         )
 
-        self.validate_reportable_fields()
+        self.validate_reportable_fields(reference_list_name="ambition")
 
         if (
             self.cleaned_data.get("subject_visit").visit_code == DAY1
@@ -78,27 +77,3 @@ class BloodResultFormValidator(
             self.applicable_if(
                 YES, field="bios_crag", field_applicable="crag_t2_result"
             )
-
-    def validate_reportable_fields(self):
-        subject_visit = self.cleaned_data.get("subject_visit")
-        RegisteredSubject = django_apps.get_model("edc_registration.registeredsubject")
-        subject_identifier = self.cleaned_data.get("subject_visit").subject_identifier
-        registered_subject = RegisteredSubject.objects.get(
-            subject_identifier=subject_identifier
-        )
-
-        # check normal ranges and grade result values
-        reportables = self.reportables_cls(
-            reference_list_name="ambition",
-            cleaned_data=copy(self.cleaned_data),
-            gender=registered_subject.gender,
-            dob=registered_subject.dob,
-            report_datetime=subject_visit.report_datetime,
-        )
-        reportables.validate_reportable_fields()
-
-        reportables.validate_results_abnormal_field()
-        self.applicable_if(
-            YES, field="results_abnormal", field_applicable="results_reportable"
-        )
-        reportables.validate_results_reportable_field(responses=self.reportable_grades)
