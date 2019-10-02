@@ -9,7 +9,7 @@ from edc_constants.constants import YES, NO, POS, NOT_APPLICABLE
 from edc_reportable import GRAMS_PER_DECILITER, IU_LITER, TEN_X_9_PER_LITER
 from edc_reportable import MICROMOLES_PER_LITER, MILLIGRAMS_PER_DECILITER
 from edc_reportable import MILLIMOLES_PER_LITER
-from edc_sites.utils import add_or_update_django_sites
+from edc_sites import add_or_update_django_sites
 from edc_utils import get_utcnow
 
 from ..form_validators import BloodResultFormValidator
