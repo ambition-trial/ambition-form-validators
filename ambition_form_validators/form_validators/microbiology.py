@@ -83,9 +83,7 @@ class MicrobiologyFormValidator(StudyDayFormValidatorMixin, FormValidator):
         )
 
         self.applicable_if_true(
-            condition=condition,
-            field="blood_culture_organism",
-            field_applicable="bacteria_identified",
+            condition=condition, field_applicable="bacteria_identified"
         )
 
         self.validate_other_specify(

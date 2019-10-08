@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 from django.test.utils import override_settings
 from edc_constants.constants import YES, NO, NOT_DONE, NOT_APPLICABLE
-from edc_sites.utils import add_or_update_django_sites
+from edc_sites import add_or_update_django_sites
 from edc_utils import get_utcnow
 
 from ..form_validators import LumbarPunctureCsfFormValidator
