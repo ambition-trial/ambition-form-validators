@@ -27,7 +27,7 @@ class TestPatientHistoryFormValidator(TestCase):
     def test_headache_requires_headache_duration(self):
         """Assert that headache selection requires duration
         """
-        ListModel.objects.create(name=HEADACHE, short_name=HEADACHE)
+        ListModel.objects.create(name=HEADACHE, name=HEADACHE)
 
         cleaned_data = {"symptom": ListModel.objects.all(), "headache_duration": None}
         form_validator = PatientHistoryFormValidator(cleaned_data=cleaned_data)
@@ -37,7 +37,7 @@ class TestPatientHistoryFormValidator(TestCase):
     def test_visual_loss_requires_duration(self):
         """Assert that visual_loss selection requires duration
         """
-        ListModel.objects.create(name=VISUAL_LOSS, short_name=VISUAL_LOSS)
+        ListModel.objects.create(name=VISUAL_LOSS, name=VISUAL_LOSS)
 
         cleaned_data = {
             "symptom": ListModel.objects.all(),
@@ -95,7 +95,7 @@ class TestPatientHistoryFormValidator(TestCase):
             self.fail(f"ValidationError unexpectedly raised. Got{e}")
 
     def test_taking_arv_first_arv_regimen_none_invalid(self):
-        ListModel.objects.create(name=NOT_APPLICABLE, short_name=NOT_APPLICABLE)
+        ListModel.objects.create(name=NOT_APPLICABLE, name=NOT_APPLICABLE)
         cleaned_data = {
             "report_datetime": get_utcnow(),
             "subject_visit": self.subject_visit,
@@ -108,7 +108,7 @@ class TestPatientHistoryFormValidator(TestCase):
         self.assertIn("initial_arv_regimen", form._errors)
 
     def test_taking_arv_initial_arv_regimen_no(self):
-        ListModel.objects.create(name=OTHER, short_name=OTHER)
+        ListModel.objects.create(name=OTHER, name=OTHER)
         cleaned_data = {
             "taking_arv": NO,
             "initial_arv_regimen": ListModel.objects.all(),
@@ -118,7 +118,7 @@ class TestPatientHistoryFormValidator(TestCase):
         self.assertIn("initial_arv_regimen", form._errors)
 
     def test_initial_arv_regimen_other_none_invalid(self):
-        ListModel.objects.create(name=OTHER, short_name=OTHER)
+        ListModel.objects.create(name=OTHER, name=OTHER)
 
         cleaned_data = {
             "initial_arv_regimen": ListModel.objects.all(),
@@ -131,7 +131,7 @@ class TestPatientHistoryFormValidator(TestCase):
     #     @tag("1")
     #     def test_taking_arv_patient_adherence_no(self):
     #         ListModel.objects.create(
-    #             name=NOT_APPLICABLE, short_name=NOT_APPLICABLE)
+    #             name=NOT_APPLICABLE, name=NOT_APPLICABLE)
     #         cleaned_data = {
     #             "taking_arv": NO,
     #             "initial_arv_regimen": ListModel.objects.all(),
@@ -142,7 +142,7 @@ class TestPatientHistoryFormValidator(TestCase):
     #         self.assertIn("current_arv_is_adherent", form._errors)
 
     def test_current_arv_regimen_other_none_invalid(self):
-        ListModel.objects.create(name=OTHER, short_name=OTHER)
+        ListModel.objects.create(name=OTHER, name=OTHER)
 
         cleaned_data = {
             "current_arv_regimen": ListModel.objects.all(),
@@ -184,7 +184,7 @@ class TestPatientHistoryFormValidator(TestCase):
 
     def test_neurological_focal_neurologic_deficit_none_invalid(self):
         ListModel.objects.create(
-            name="focal_neurologic_deficit", short_name="focal_neurologic_deficit"
+            name="focal_neurologic_deficit", name="focal_neurologic_deficit"
         )
 
         cleaned_data = {
@@ -196,7 +196,7 @@ class TestPatientHistoryFormValidator(TestCase):
         self.assertIn("focal_neurologic_deficit", form._errors)
 
     def test_neurological_neurological_other_none_invalid(self):
-        ListModel.objects.create(name=OTHER, short_name=OTHER)
+        ListModel.objects.create(name=OTHER, name=OTHER)
 
         cleaned_data = {
             "neurological": ListModel.objects.all(),
@@ -207,7 +207,7 @@ class TestPatientHistoryFormValidator(TestCase):
         self.assertIn("neurological_other", form._errors)
 
     def test_specify_medications_NO_other_none_invalid(self):
-        ListModel.objects.create(name=OTHER, short_name=OTHER)
+        ListModel.objects.create(name=OTHER, name=OTHER)
 
         cleaned_data = {
             "specify_medications": ListModel.objects.all(),
