@@ -33,7 +33,7 @@ class TestRadiolodyFormValidator(TestCase):
         self.assertIn("cxr_date", form_validator._errors)
 
     def test_infiltrate_location_none(self):
-        ListModel.objects.create(name="infiltrates", name="infiltrates")
+        ListModel.objects.create(name="infiltrates", display_name="infiltrates")
         options = {
             "cxr_done": YES,
             "cxr_date": get_utcnow(),
@@ -45,7 +45,7 @@ class TestRadiolodyFormValidator(TestCase):
         self.assertIn("infiltrate_location", form_validator._errors)
 
     def test_infiltrate_location_not_none(self):
-        ListModel.objects.create(name=NORMAL, name=NORMAL)
+        ListModel.objects.create(name=NORMAL, display_name=NORMAL)
         options = {"cxr_type": ListModel.objects.all(), "infiltrate_location": "lul"}
         form_validator = RadiologyFormValidator(cleaned_data=options)
         self.assertRaises(ValidationError, form_validator.validate)
@@ -146,7 +146,7 @@ class TestRadiolodyFormValidator(TestCase):
         self.assertIn("abnormal_results_reason", form_validator._errors)
 
     def test_abnormal_results_reason_other_none(self):
-        ListModel.objects.create(name=OTHER, name=OTHER)
+        ListModel.objects.create(name=OTHER, display_name=OTHER)
         options = {
             "abnormal_results_reason": ListModel.objects.all(),
             "abnormal_results_reason_other": None,
@@ -156,7 +156,7 @@ class TestRadiolodyFormValidator(TestCase):
         self.assertIn("abnormal_results_reason_other", form_validator._errors)
 
     def test_abnormal_results_reason_other_not_none(self):
-        ListModel.objects.create(name="cerebral_oedema", name="cerebral_oedema")
+        ListModel.objects.create(name="cerebral_oedema", display_name="cerebral_oedema")
         options = {
             "abnormal_results_reason": ListModel.objects.all(),
             "abnormal_results_reason_other": "tumor",
@@ -166,7 +166,7 @@ class TestRadiolodyFormValidator(TestCase):
         self.assertIn("abnormal_results_reason_other", form_validator._errors)
 
     def test_if_infarcts_location_none(self):
-        ListModel.objects.create(name="infarcts", name="infarcts")
+        ListModel.objects.create(name="infarcts", display_name="infarcts")
         options = {
             "abnormal_results_reason": ListModel.objects.all(),
             "infarcts_location": None,
@@ -176,7 +176,7 @@ class TestRadiolodyFormValidator(TestCase):
         self.assertIn("infarcts_location", form_validator._errors)
 
     def test_if_infarcts_location_not_none(self):
-        ListModel.objects.create(name="cerebral_oedema", name="cerebral_oedema")
+        ListModel.objects.create(name="cerebral_oedema", display_name="cerebral_oedema")
         options = {
             "abnormal_results_reason": ListModel.objects.all(),
             "infarcts_location": "chest",
